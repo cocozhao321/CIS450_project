@@ -4,7 +4,7 @@ import BestMoviesRow from './BestMoviesRow';
 import '../style/BestMovies.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class BestMovies extends React.Component {
+export default class Search extends React.Component {
 	constructor(props) {
 		super(props);
 

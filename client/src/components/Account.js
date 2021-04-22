@@ -5,7 +5,7 @@ import PageNavbar from './PageNavbar';
 import KeywordButton from './KeywordButton';
 import DashboardMovieRow from './DashboardMovieRow';
 
-export default class Dashboard extends React.Component {
+export default class Account extends React.Component {
   constructor(props) {
     super(props);
 

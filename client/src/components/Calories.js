@@ -4,7 +4,7 @@ import RecommendationsRow from './RecommendationsRow';
 import '../style/Recommendations.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default class Recommendations extends React.Component {
+export default class Calories extends React.Component {
 	constructor(props) {
 		super(props);
 

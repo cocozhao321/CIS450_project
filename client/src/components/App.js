@@ -4,9 +4,10 @@ import {
 	Route,
 	Switch
 } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import Recommendations from './Recommendations';
-import BestMovies from './BestMovies';
+import Home from './Home';
+import Calories from './Calories';
+import Account from './Account';
+import Search from './Search';
 
 export default class App extends React.Component {
 
@@ -18,20 +19,24 @@ export default class App extends React.Component {
 						<Route
 							exact
 							path="/"
-							render={() => <Dashboard />}
+							render={() => <Home />}
 						/>
 						<Route
 							exact
-							path="/dashboard"
-							render={() => <Dashboard />}
+							path="/home"
+							render={() => <Home />}
 						/>
 						<Route
-							path="/recommendations"
-							render={() => <Recommendations />}
+							path="/calories"
+							render={() => <Calories />}
 						/>
 						<Route
-							path="/bestmovies"
-							render={() => <BestMovies />}
+							path="/search"
+							render={() => <Search />}
+						/>
+            <Route
+							path="/account"
+							render={() => <Account />}
 						/>
 					</Switch>
 				</Router>
