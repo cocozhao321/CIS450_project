@@ -1,15 +1,15 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-export default class DashboardMovieRow extends React.Component {
+export default class HomeReviewsList extends React.Component {
 
 	/* ---- Q1b (Dashboard) ---- */
-	/* Change the contents (NOT THE STRUCTURE) of the HTML elements to show a movie row. */
 	render() {
 		return (
 			<div className="movie">
 				<div className="RecipeID">{this.props.RecipeID}</div>
-				<div className="Hi">{this.props.Name}</div>
+				<div className="Name"> {this.props.Name} </div>
+				<div className="Review_Count"> {this.props.Review_Count} </div>
 			</div>
 		);
 	};
