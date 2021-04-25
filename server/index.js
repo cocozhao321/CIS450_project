@@ -24,7 +24,6 @@ app.get('/topReviews', routes.getTopReviews);
 app.get('/topAuthors', routes.getTopAuthors);
 
 
-
 /* ---- Q2 (Recommendations) ---- */
 app.get('/recs/:movie', routes.getRecs);
 
@@ -32,7 +31,7 @@ app.get('/recs/:movie', routes.getRecs);
 /* ---- (Best Movies) ---- */
 app.get('/decades', routes.getDecades);
 app.get('/genres', routes.getGenres);
-
+app.get('/search/:decade/:genre', routes.bestMoviesPerDecadeGenre);
 
 /* ---- Q3b (Best Movies) ---- */
 app.get('/calories/:term/', routes.calories);

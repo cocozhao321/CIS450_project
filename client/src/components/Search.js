@@ -9,11 +9,19 @@ export default class Search extends React.Component {
 		super(props);
 
 		this.state = {
-			selectedDecade: "",
-			selectedGenre: "Action",
+			//selectedIngre1: "",
+      //selectedIngre2: "",
+      //selectedIngre3: "",
+      //selectedIngre4: "",
+      //selectedIngre5: "",
+			//selectedAuthor: "",
+      selectedDecade: 0,
+      selectedGenre: 0,
+      //selectedCookTime: "",
 			decades: [],
 			genres: [],
-			movies: []
+			//cookTimes: [],
+      movies: []
 		};
 
 		this.submitDecadeGenre = this.submitDecadeGenre.bind(this);
@@ -88,7 +96,7 @@ export default class Search extends React.Component {
 
 	/* ---- Q3b (Best Movies) ---- */
 	submitDecadeGenre() {
-    fetch("http://localhost:8081/bestMovies/"+this.state.selectedDecade+'/'+this.state.selectedGenre,
+    fetch("http://localhost:8081/search/"+this.state.selectedDecade+'/'+this.state.selectedGenre,
     {
       method: 'GET' // The type of HTTP request.
     }).then(res => {
@@ -97,22 +105,22 @@ export default class Search extends React.Component {
     }, err => {
       // Print the error if there is one.
       console.log(err);
-    }).then(moviesList => {
-      if (!moviesList) return;
+    }).then(recipesList => {
+      if (!recipesList) return;
 
       // Map each keyword in this.state.keywords to an HTML element:
       // A button which triggers the showMovies function for each keyword.
-      const bestMoviesDivs = moviesList.map((movieObj, i) =>
+      const recipeDivs = recipesList.map((recipeObj, i) =>
         <BestRecipesRow 
-          title={movieObj.title} 
-          id={movieObj.movie_id} 
-          rating={movieObj.rating} 
+          name={recipeObj.Recipe_name} 
+          img={recipeObj.Recipe_photo} 
+          rating={recipeObj.Rate} 
         /> 
       );
 
       // Set the state of the keywords list to the value returned by the HTTP response from the server.
       this.setState({
-        movies: bestMoviesDivs
+        movies: recipeDivs
       });
     }, err => {
       // Print the error if there is one.
@@ -128,7 +136,7 @@ export default class Search extends React.Component {
 
 				<div className="container bestmovies-container">
 					<div className="jumbotron">
-						<div className="h5">Best Movies</div>
+						<div className="h5">Customized Filter</div>
 						<div className="dropdown-container">
 							<select value={this.state.selectedDecade} onChange={this.handleDecadeChange} className="dropdown" id="decadesDropdown">
                 {this.state.decades}
@@ -136,15 +144,15 @@ export default class Search extends React.Component {
 							<select value={this.state.selectedGenre} onChange={this.handleGenreChange} className="dropdown" id="genresDropdown">
 								{this.state.genres}
 							</select>
-							<button className="submit-btn" id="submitBtn" onClick={this.submitDecadeGenre}>Submit</button>
+							<button className="submit-btn" id="submitBtn" onClick={this.submitDecadeGenre}>Search!</button>
 						</div>
 					</div>
 					<div className="jumbotron">
 						<div className="movies-container">
 							<div className="movie">
-			          <div className="header"><strong>Title</strong></div>
-			          <div className="header"><strong>Movie ID</strong></div>
-								<div className="header"><strong>Rating</strong></div>
+			          <div className="header"><strong>Recipe Name</strong></div>
+			          <div className="header"><strong>Rate</strong></div>
+								<div className="header"><strong>Review Count</strong></div>
 			        </div>
 			        <div className="movies-container" id="results">
 			          {this.state.movies}

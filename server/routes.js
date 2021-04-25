@@ -102,9 +102,9 @@ const getRecs = (req, res) => {
 /* ---- Q3a (Best Movies) ---- */
 const getDecades = (req, res) => {
   var query = `
-  SELECT DISTINCT (FLOOR(release_year / 10) * 10) AS release_year
-  FROM movie
-  ORDER BY release_year ASC;
+  SELECT DISTINCT (FLOOR(Rate)) AS rateBase
+  FROM reviews
+  ORDER BY rateBase DESC;
   `
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -119,12 +119,29 @@ const getDecades = (req, res) => {
 /* ---- (Best Movies) ---- */
 const getGenres = (req, res) => {
   const query = `
-    SELECT name
-    FROM genre
-    WHERE name <> 'genres'
-    ORDER BY name ASC;
-  `;
+    SELECT DISTINCT ((FLOOR(Review_count/100)) * 100) AS popularBase
+    FROM recipes
+    ORDER BY popularBase ASC;
+  `
 
+  connection.query(query, (err, rows, fields) => {
+    if (err) console.log(err);
+    else res.json(rows);
+  });
+};
+
+const bestMoviesPerDecadeGenre = (req, res) => {
+  var givengenre = req.params.genre;
+  var givendecade = req.params.decade;
+
+  var query = `
+  SELECT Recipe_name, Rate, Review_count, Recipe_photo 
+  FROM recipes reci JOIN reviews rev ON reci.RecipeID = rev.RecipeID 
+  WHERE (FLOOR(Rate)) = ${givendecade} AND ((FLOOR(Review_count/100)) * 100) = ${givengenre}
+  LIMIT 20;
+  `
+  //  ORDER BY Rate DESC
+  //ORDER BY Review_count DESC
   connection.query(query, (err, rows, fields) => {
     if (err) console.log(err);
     else res.json(rows);
@@ -159,5 +176,6 @@ module.exports = {
 	getRecs: getRecs,
   getDecades: getDecades,
   getGenres: getGenres,
+  bestMoviesPerDecadeGenre: bestMoviesPerDecadeGenre,
   calories: calories
 };
