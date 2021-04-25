@@ -133,29 +133,14 @@ const getGenres = (req, res) => {
 
 
 /* ---- Q3b (Best Movies) ---- */
-const bestMoviesPerDecadeGenre = (req, res) => {
-  var inputDecade = req.params.decade;
-  var inputGenre = req.params.genre;
+const calories = (req, res) => {
+  var ingredient = req.params.term;
   var query = `
-  WITH avg AS 
-  (SELECT genre_name, AVG(rating) AS avgRating
-  FROM movie_genre mg JOIN movie m ON mg.movie_id=m.movie_id
-  WHERE FLOOR(release_year / 10) * 10 = '${inputDecade}'
-  GROUP BY genre_name),
-  movs AS 
-  (SELECT m.movie_id, m.title, AVG(m.rating) AS rating
-  FROM movie m JOIN movie_genre mg ON m.movie_id=mg.movie_id
-  WHERE FLOOR(release_year / 10) * 10 = '${inputDecade}' AND mg.genre_name = '${inputGenre}'
-  GROUP BY m.movie_id, title),
-  compare AS
-  (SELECT mv.movie_id, mg.genre_name, mv.title, mv.rating, avgRating
-  FROM movs mv JOIN movie_genre mg ON mv.movie_id = mg.movie_id JOIN avg a ON a.genre_name = mg.genre_name)
-  SELECT DISTINCT movie_id, title, rating 
-  FROM compare 
-  GROUP BY title, movie_id
-  HAVING rating > MAX(avgRating)
-  ORDER BY title ASC
-  LIMIT 100;
+  SELECT Recipe_name, Rate, Recipe_photo
+FROM recipes rp JOIN reviews rv ON rp.RecipeID = rv.RecipeID 
+WHERE rp.Ingredients LIKE '%${ingredient}%'
+ORDER BY Rate DESC
+LIMIT 5;
   `
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -174,5 +159,5 @@ module.exports = {
 	getRecs: getRecs,
   getDecades: getDecades,
   getGenres: getGenres,
-  bestMoviesPerDecadeGenre: bestMoviesPerDecadeGenre
+  calories: calories
 };

@@ -192,3 +192,23 @@ body {
     transform: translateY(0px)
   }
 }
+
+.img {
+  height: 100px;
+}
+
+div.recipes-container {
+  display: inline-block; 
+  text-align:center;
+}
+
+div.recipeResults {
+  display: inline-block; 
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+}
+
+div.calories {
+  text-align: center;
+}

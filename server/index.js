@@ -35,7 +35,7 @@ app.get('/genres', routes.getGenres);
 
 
 /* ---- Q3b (Best Movies) ---- */
-app.get('/bestMovies/:decade/:genre', routes.bestMoviesPerDecadeGenre);
+app.get('/calories/:term/', routes.calories);
 
 
 app.listen(8081, () => {

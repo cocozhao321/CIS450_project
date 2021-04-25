@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React from 'react';
+import BestRecipesRow from './BestRecipesRow';
 import PageNavbar from './PageNavbar';
 // Main component
 export default class Calories extends React.Component {
   state = {
     items: [],
-    term: 'egg',
+    term: '',
+    recipes: []
   };
 
   componentDidMount() {
@@ -82,6 +84,36 @@ export default class Calories extends React.Component {
   
   storeClick = () => {
     this.fetchItems();
+    fetch(`http://localhost:8081/calories/${this.state.term}`,
+    {
+      method: 'GET' // The type of HTTP request.
+    }).then(res => {
+      // Convert the response data to a JSON.
+      return res.json();
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    }).then(recipesList => {
+      if (!recipesList) return;
+
+      // Map each keyword in this.state.keywords to an HTML element:
+      // A button which triggers the showMovies function for each keyword.
+      const recipeDivs = recipesList.map((recipeObj, i) =>
+        <BestRecipesRow 
+          name={recipeObj.Recipe_name} 
+          img={recipeObj.Recipe_photo} 
+          rating={recipeObj.Rate} 
+        /> 
+      );
+
+      // Set the state of the keywords list to the value returned by the HTTP response from the server.
+      this.setState({
+        recipes: recipeDivs
+      });
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    });
     console.log('click')
   }
   
@@ -93,14 +125,16 @@ export default class Calories extends React.Component {
   render() {
     let allItems = this.getItems();
     return (
-      <div className="basket">
+      <div className="calories">
         <PageNavbar active="bestgenres" />
-        <Search sendValue={this.storeValue} sendEnter={this.storeClick} sendClick={this.storeClick} />
-        
+        <p id="calorie_instructions">Enter an ingredient below to view its nutritional contents and get highly rated recipe recommendations!</p>
+        <Search sendValue={this.storeValue} sendEnter={this.storeClick} />
         <div className='items'>
           { allItems.length === 0 ? <div className='error'>No food found... <i class="fas fa-pizza-slice"></i></div> : allItems }
         </div>
-        
+        <div className="recipes-container" id="results">
+			          {this.state.recipes.length > 1 ? this.state.recipes : "No recipes seem to include this ingredient..."}
+			        </div>
       </div>
     );
   }
@@ -108,6 +142,8 @@ export default class Calories extends React.Component {
 
 // Search component
 class Search extends React.Component {
+
+  // this.handleClick = this.handleClick.bind(this);
   
   handleChange = (e) => {
     this.props.sendValue(e.target.value);
@@ -118,16 +154,12 @@ class Search extends React.Component {
       console.log('Enter')
     }
   }
-  handleClick = () => {
-    this.props.sendClick();
-  }
   
   render() {
     return (
       <div className="search">
         <div className='search-box'>
           <input type='text' onChange={this.handleChange} onKeyDown={this.keyDown} placeholder='Enter food...' />
-          <button onClick={this.handleClick} ><i class="fas fa-search"></i></button>
         </div>
       </div>
      )
