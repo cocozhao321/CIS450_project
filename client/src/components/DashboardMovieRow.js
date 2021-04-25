@@ -9,7 +9,7 @@ export default class DashboardMovieRow extends React.Component {
 		return (
 			<div className="movie">
 				<div className="RecipeID">{this.props.RecipeID}</div>
-				<div className="Hi">{this.props.Name}</div>
+				<div className="Name">{this.props.Name}</div>
 			</div>
 		);
 	};
