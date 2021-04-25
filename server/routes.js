@@ -9,18 +9,17 @@ const connection = mysql.createPool(config);
 /* -------------------------------------------------- */
 
 
-/* ---- Q1a (Dashboard) ---- */
-// Equivalent to: function getTop20Keywords(req, res) {}
-const getTop20Keywords = (req, res) => {
+/* ---- Q1 (HOMEPAGE) ---- */
+const getTopRecipes = (req, res) => {
+  // Selects highly rated recipes.
   var query = `
-    WITH kwds AS (SELECT kwd_name, COUNT(movie_id)
-    FROM movie_keyword
-    GROUP BY kwd_name
-    ORDER BY COUNT(movie_id) DESC
-    LIMIT 20)
-    SELECT kwd_name 
-    FROM kwds;
+    SELECT rev.RecipeID, Recipe_name AS Name
+    FROM project_db.reviews rev JOIN project_db.recipes rec ON rev.RecipeID = rec.RecipeID
+    WHERE Rate >= 4.5
+    ORDER BY Rate
+    LIMIT 10;
   `;
+
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {
@@ -30,29 +29,46 @@ const getTop20Keywords = (req, res) => {
   });
 };
 
-
-/* ---- Q1b (Dashboard) ---- */
-const getTopMoviesWithKeyword = (req, res) => {
-  var inputKeyword = req.params.keyword;
+const getTopReviews = (req, res) => {
+  // Selects highly rated recipes.
   var query = `
-    WITH movs AS (
-      SELECT DISTINCT movie_id
-      FROM movie_keyword
-      WHERE kwd_name='${inputKeyword}'
-    ) 
-    SELECT m.title, m.rating, m.num_ratings
-    FROM movs JOIN movie m ON movs.movie_id = m.movie_id
-    ORDER BY rating DESC, num_ratings DESC
-    LIMIT 10;
+    SELECT rev.RecipeID, Recipe_name AS Name, Review_count AS Review_Count
+    FROM recipes rec JOIN reviews rev ON rec.RecipeID = rev.RecipeID
+    ORDER BY Review_count DESC
+    LIMIT 20;
   `;
+
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {
-      // console.log(rows)
+      console.log(rows)
       res.json(rows);
     }
   });
 };
+
+const getTopAuthors = (req, res) => {
+  var query = `
+    WITH highlyRated AS
+    (SELECT rev.RecipeID, rec.Author
+    FROM reviews rev JOIN recipes rec ON rev.RecipeID = rec.RecipeID
+    WHERE Rate >= 4.5)
+    SELECT Author, COUNT(RecipeID) AS rec_count
+    FROM highlyRated
+    GROUP BY Author
+    ORDER BY COUNT(RecipeID) DESC
+    LIMIT 10;
+  `;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      console.log(rows)
+      res.json(rows);
+    }
+  });
+};
+
 
 
 /* ---- Q2 (Recommendations) ---- */
@@ -151,8 +167,10 @@ const bestMoviesPerDecadeGenre = (req, res) => {
 };
 
 module.exports = {
-	getTop20Keywords: getTop20Keywords,
-	getTopMoviesWithKeyword: getTopMoviesWithKeyword,
+  getTopRecipes: getTopRecipes,
+  getTopReviews: getTopReviews,
+  getTopAuthors: getTopAuthors,
+
 	getRecs: getRecs,
   getDecades: getDecades,
   getGenres: getGenres,

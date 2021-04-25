@@ -2,8 +2,8 @@ import React from 'react';
 import '../style/Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
-import KeywordButton from './KeywordButton';
 import DashboardMovieRow from './DashboardMovieRow';
+import HomeReviewsList from './HomeReviewsList';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -12,17 +12,17 @@ export default class Home extends React.Component {
     // The state maintained by this React Component. This component maintains the list of keywords,
     // and a list of movies for a specified keyword.
     this.state = {
-      keywords: [],
-      movies: []
+      topRecipeResults: [],
+      topReviewResults: [],
+      topAuthorResults: []
     };
 
-    this.showMovies = this.showMovies.bind(this);
   };
 
   // React function that is called when the page load.
   componentDidMount() {
     // Send an HTTP request to the server.
-    fetch("http://localhost:8081/keywords",
+    fetch("http://localhost:8081/topRecipes",
     {
       method: 'GET' // The type of HTTP request.
     }).then(res => {
@@ -31,33 +31,29 @@ export default class Home extends React.Component {
     }, err => {
       // Print the error if there is one.
       console.log(err);
-    }).then(keywordsList => {
-      if (!keywordsList) return;
+    }).then(recipeList => {
+      if (!recipeList) return;
 
       // Map each keyword in this.state.keywords to an HTML element:
       // A button which triggers the showMovies function for each keyword.
-      const keywordsDivs = keywordsList.map((keywordObj, i) =>
-        <KeywordButton 
-          id={"button-" + keywordObj.kwd_name} 
-          onClick={() => this.showMovies(keywordObj.kwd_name)} 
-          keyword={keywordObj.kwd_name} 
-        /> 
+      const r = recipeList.map((recObj, i) =>
+        <DashboardMovieRow 
+          RecipeID={recObj.RecipeID}
+          Name={recObj.Name} 
+        />
       );
 
       // Set the state of the keywords list to the value returned by the HTTP response from the server.
       this.setState({
-        keywords: keywordsDivs
+        topRecipeResults: r
       });
     }, err => {
       // Print the error if there is one.
       console.log(err);
     });
-  };
 
-  /* ---- Q1b (Dashboard) ---- */
-  /* Set this.state.movies to a list of <DashboardMovieRow />'s. */
-  showMovies(keyword) {
-    fetch("http://localhost:8081/keywords/"+keyword,
+
+    fetch("http://localhost:8081/topReviews",
     {
       method: 'GET' // The type of HTTP request.
     }).then(res => {
@@ -66,61 +62,120 @@ export default class Home extends React.Component {
     }, err => {
       // Print the error if there is one.
       console.log(err);
-    }).then(moviesList => {
-      if (!moviesList) return;
+    }).then(recipeList => {
+      if (!recipeList) return;
 
-      // Map each movie in this.state.keywords to an HTML element:
-      // A button which triggers the showMovies function for each keyword.
-      // console.log(moviesList[0].num_ratings + "W" + moviesList[0].title);
-      const movieDivs = moviesList.map((movieObj, i) =>
-        <DashboardMovieRow 
-          title={movieObj.title} 
-          rating={movieObj.rating} 
-          num_ratings={movieObj.num_ratings} 
-        /> 
+      const r = recipeList.map((recObj, i) =>
+        <HomeReviewsList 
+          RecipeID={recObj.RecipeID}
+          Name={recObj.Name} 
+          Review_Count={recObj.Review_Count}
+        />
       );
 
       // Set the state of the keywords list to the value returned by the HTTP response from the server.
       this.setState({
-        movies: movieDivs
+        topReviewResults: r
       });
     }, err => {
       // Print the error if there is one.
       console.log(err);
     });
-    // this.state.movies = ?
+
+
+    fetch("http://localhost:8081/topAuthors",
+    {
+      method: 'GET' // The type of HTTP request.
+    }).then(res => {
+      // Convert the response data to a JSON.
+      return res.json();
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    }).then(authList => {
+      if (!authList) return;
+
+      const a = authList.map((authObj, i) =>
+        <DashboardMovieRow 
+          RecipeID={authObj.Author}
+          Name={authObj.rec_count} 
+        />
+      );
+
+      // Set the state of the keywords list to the value returned by the HTTP response from the server.
+      this.setState({
+        topAuthorResults: a
+      });
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    });
+
+
   };
 
+
   render() {    
+
     return (
       <div className="Dashboard">
 
         <PageNavbar active="dashboard" />
 
-        <br />
         <div className="container movies-container">
           <div className="jumbotron">
-            <div className="h5">Keywords</div>
-            <div className="keywords-container">
-              {this.state.keywords}
-            </div>
-          </div>
-
-          <br />
-          <div className="jumbotron">
-            <div className="movies-container">
+            <div className="h5">Top 10 Rated Recipes</div>
+              <div className="movies-container">
               <div className="movies-header">
-                <div className="header-lg"><strong>Title</strong></div>
-                <div className="header"><strong>Rating</strong></div>
-                <div className="header"><strong>Vote Count</strong></div>
+                <div className="header"><strong>RecipeID</strong></div>
+                <div className="header-lg"><strong>Name</strong></div>
               </div>
               <div className="results-container" id="results">
-                {this.state.movies}
+                {this.state.topRecipeResults}
               </div>
             </div>
           </div>
         </div>
+
+        <br />
+
+        <div className="container movies-container">
+          <div className="jumbotron">
+            <div className="h5">Top 20 Recipes with Most Reviews</div>
+              <div className="movies-container">
+              <div className="movies-header">
+                <div className="header"><strong>RecipeID</strong></div>
+                <div className="header-lg"><strong>Name</strong></div>
+                <div className="header"><strong>Reviews Count</strong></div>
+              </div>
+              <div className="results-container" id="results">
+                {this.state.topReviewResults}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <br />
+
+        <div className="container movies-container">
+          <div className="jumbotron">
+            <div className="h5">Top 10 Authors with Most Recipes</div>
+              <div className="movies-container">
+              <div className="movies-header">
+                <div className="header-lg"><strong>Author</strong></div>
+                <div className="header"><strong>Recipes Count</strong></div>
+              </div>
+              <div className="results-container" id="results">
+                {this.state.topAuthorResults}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       </div>
+
     );
   };
 };
