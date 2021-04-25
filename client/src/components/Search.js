@@ -137,6 +137,7 @@ export default class Search extends React.Component {
 				<div className="container bestmovies-container">
 					<div className="jumbotron">
 						<div className="h5">Customized Filter</div>
+            <p id="filtering">Create your customized filters!</p>
 						<div className="dropdown-container">
 							<select value={this.state.selectedDecade} onChange={this.handleDecadeChange} className="dropdown" id="decadesDropdown">
                 {this.state.decades}
