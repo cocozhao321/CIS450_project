@@ -1,6 +1,6 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
-import BestMoviesRow from './BestMoviesRow';
+import BestRecipesRow from './BestRecipesRow';
 import '../style/BestMovies.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -103,7 +103,7 @@ export default class Search extends React.Component {
       // Map each keyword in this.state.keywords to an HTML element:
       // A button which triggers the showMovies function for each keyword.
       const bestMoviesDivs = moviesList.map((movieObj, i) =>
-        <BestMoviesRow 
+        <BestRecipesRow 
           title={movieObj.title} 
           id={movieObj.movie_id} 
           rating={movieObj.rating} 

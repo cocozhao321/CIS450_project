@@ -13,14 +13,16 @@ app.use(bodyParser.urlencoded({extended: false}));
 /* ------------------- Route handler registration ----------------- */
 /* ---------------------------------------------------------------- */
 
-/* ---- (Dashboard) ---- */
-// The route localhost:8081/keywords is registered to the function
-// routes.getTop20Keywords, specified in routes.js.
-app.get('/keywords', routes.getTop20Keywords);
+/* ---- (HOME) ---- */
+// Top 10 Rated Recipes
+app.get('/topRecipes', routes.getTopRecipes);
 
+// Top 20 Recipes with Most Reviews
+app.get('/topReviews', routes.getTopReviews); 
 
-/* ---- Q1b (Dashboard) ---- */
-app.get('/keywords/:keyword', routes.getTopMoviesWithKeyword);
+// Top 10 Authors with Most Recipes
+app.get('/topAuthors', routes.getTopAuthors);
+
 
 
 /* ---- Q2 (Recommendations) ---- */
@@ -33,7 +35,7 @@ app.get('/genres', routes.getGenres);
 
 
 /* ---- Q3b (Best Movies) ---- */
-app.get('/bestMovies/:decade/:genre', routes.bestMoviesPerDecadeGenre);
+app.get('/calories/:term/', routes.calories);
 
 
 app.listen(8081, () => {
