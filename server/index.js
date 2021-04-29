@@ -17,16 +17,17 @@ app.use(bodyParser.urlencoded({extended: false}));
 // Top 10 Rated Recipes
 app.get('/topRecipes', routes.getTopRecipes);
 
-// Top 20 Recipes with Most Reviews
+// Top 10 Recipes with Most Reviews
 app.get('/topReviews', routes.getTopReviews); 
 
 // Top 10 Authors with Most Recipes
 app.get('/topAuthors', routes.getTopAuthors);
 
+// Top 10 Recipes with Best Rating-to-Time Ratio
+app.get('/topTimeRatioRecipes', routes.getTopTimeRatioRecipes);
 
-/* ---- Q2 (Recommendations) ---- */
-app.get('/recs/:movie', routes.getRecs);
-
+// Top 10 Best Rating-to-Time Recipes that Use an Oven
+app.get('/topOvenRecipes', routes.getTopOvenRecipes);
 
 /* ---- (Best Movies) ---- */
 app.get('/decades', routes.getDecades);
