@@ -3,6 +3,7 @@ import PageNavbar from './PageNavbar';
 import SearchRow from './SearchRow';
 import '../style/BestMovies.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+//import background from "../style/foodbk.jpeg";
 
 export default class Search extends React.Component {
 	constructor(props) {
@@ -21,7 +22,7 @@ export default class Search extends React.Component {
     this.handleTimeChange = this.handleTimeChange.bind(this);
 	};
 
-
+  
 	handleIngreChange(e) {
 		this.setState({
       selectedIngre: e.target.value
@@ -33,16 +34,16 @@ export default class Search extends React.Component {
       selectedAuthor: e.target.value
     });
 	};
-
+  
   handleTimeChange(e) {
 		this.setState({
       selectedCookTime: e.target.value
     });
 	};
-
+  
 
 	submitFilters() {
-    fetch("http://localhost:8081/search/"+this.state.selectedIngre + '/' + this.state.selectedAuthor + '/' + this.state.selectedCookTime,
+    fetch("http://localhost:8081/search/" +this.state.selectedIngre + '/' + this.state.selectedAuthor + '/' + this.state.selectedCookTime,
     {
       method: 'GET'
     }).then(res => {
@@ -71,26 +72,34 @@ export default class Search extends React.Component {
 
 	render() {
 		return (
+      <div className="background" >
 			<div className="Search">	
-				<PageNavbar active="bestgenres" />
+				<PageNavbar active="search" />
+        
 				<div className="search">
-					<div className="jumbotron">
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
+          <br></br>
 						<div className="h5">Customized Filter</div>
-            <p id="filtering">Create your customized filters!</p>
-
+            <br></br>
+            <p id="filtering">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Results will rank in rating order from high to low ｡◕ ‿ ◕｡</p>
             <div className="filters">
-							<input type='text' placeholder="Ingredient " value={this.state.selectedIngre} onChange={this.handleIngreChange}/>
               <input type='text' placeholder="Author " value={this.state.selectedAuthor} onChange={this.handleAuthorChange}/>
-              <input type="text" pattern="[0-9]*" placeholder="Cooktime in minutes " value={this.state.selectedCookTime} onChange={this.handleTimeChange}/>
-							<button id="submitMovieBtn" className="submit-btn" onClick={this.submitFilters}>Find your recipe!</button>
+              <input type='text' placeholder="Ingredient " value={this.state.selectedIngre} onChange={this.handleIngreChange}/>
+							<input type="text" pattern="[0-9]*" placeholder="Cooktime in minutes " value={this.state.selectedCookTime} onChange={this.handleTimeChange}/>
+              <button id="submitMovieBtn" className="submit-btn" onClick={this.submitFilters}>Find your recipe!</button>
 						</div>
-					</div>
-
-
-					
-
-			  </div>
+            <br></br>
+            <div className="gridcontainer">
+              {this.state.recipes}
+						</div>
+        </div>
 			</div>
+      </div>
 		);
 	};
 };
