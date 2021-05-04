@@ -134,7 +134,7 @@ export default class Calories extends React.Component {
         </div>
         <div className="recipes-container" id="results">
 			          {this.state.recipes.length > 1 ? this.state.recipes : "No recipes seem to include this ingredient..."}
-			        </div>
+			  </div>
       </div>
     );
   }
