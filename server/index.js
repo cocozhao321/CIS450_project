@@ -29,12 +29,6 @@ app.get('/topTimeRatioRecipes', routes.getTopTimeRatioRecipes);
 // Top 10 Best Rating-to-Time Recipes that Use an Oven
 app.get('/topOvenRecipes', routes.getTopOvenRecipes);
 
-/* ---- (Best Movies) ---- */
-app.get('/decades', routes.getDecades);
-app.get('/genres', routes.getGenres);
-app.get('/search/:decade/:genre', routes.bestMoviesPerDecadeGenre);
-
-/* ---- Q3b (Best Movies) ---- */
 app.get('/calories/:term/', routes.calories);
 
 

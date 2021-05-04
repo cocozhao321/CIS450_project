@@ -1,28 +1,43 @@
 import React from 'react';
-import '../style/Dashboard.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import DashboardMovieRow from './DashboardMovieRow';
 import HomeReviewsList from './HomeReviewsList';
 
+import "bootstrap/dist/css/bootstrap.css";
+import "./assets/scss/paper-dashboard.scss?v=1.2.0";
+import "./assets/demo/demo.css";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
+
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Table,
+  Row,
+  Col,
+} from "reactstrap";
+
+
+const topRecipes = [], topReviews = [], topAuthors = [], topRatio =[];
+
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
-
-    // The state maintained by this React Component. This component maintains the list of keywords,
-    // and a list of movies for a specified keyword.
-    this.state = {
-      topRecipeResults: [],
-      topReviewResults: [],
-      topAuthorResults: [],
-      topRatioResults: [],
-      topOvenResults: []
-    };
-
   };
+
 
   // React function that is called when the page load.
   componentDidMount() {
+    function createDataTwoElem(recipeID, value) {
+      return { recipeID, value };
+    }
+
+    function createDataThreeElem(recipeID, value, value2) {
+      return { recipeID, value, value2 };
+    }
+
+    
     // Send an HTTP request to the server.
     fetch("http://localhost:8081/topRecipes",
     {
@@ -31,24 +46,14 @@ export default class Home extends React.Component {
       // Convert the response data to a JSON.
       return res.json();
     }, err => {
-      // Print the error if there is one.
       console.log(err);
     }).then(recipeList => {
       if (!recipeList) return;
 
-      // Map each keyword in this.state.keywords to an HTML element:
-      // A button which triggers the showMovies function for each keyword.
-      const r = recipeList.map((recObj, i) =>
-        <DashboardMovieRow 
-          RecipeID={recObj.RecipeID}
-          RecipeName={recObj.RecipeName} 
-        />
-      );
-
-      // Set the state of the keywords list to the value returned by the HTTP response from the server.
-      this.setState({
-        topRecipeResults: r
+      recipeList.forEach((item, i) => {
+        topRecipes.push(createDataThreeElem(item.RecipeID, item.RecipeName, item.Recipe_photo));
       });
+
     }, err => {
       // Print the error if there is one.
       console.log(err);
@@ -67,17 +72,8 @@ export default class Home extends React.Component {
     }).then(recipeList => {
       if (!recipeList) return;
 
-      const r = recipeList.map((recObj, i) =>
-        <HomeReviewsList 
-          RecipeID={recObj.RecipeID}
-          RecipeName={recObj.RecipeName} 
-          ReviewCount={recObj.ReviewCount}
-        />
-      );
-
-      // Set the state of the keywords list to the value returned by the HTTP response from the server.
-      this.setState({
-        topReviewResults: r
+      recipeList.forEach((item, i) => {
+        topReviews.push(createDataThreeElem(item.RecipeID, item.RecipeName, item.ReviewCount));
       });
     }, err => {
       // Print the error if there is one.
@@ -97,16 +93,8 @@ export default class Home extends React.Component {
     }).then(authList => {
       if (!authList) return;
 
-      const a = authList.map((authObj, i) =>
-        <DashboardMovieRow 
-          RecipeID={authObj.Author}
-          RecipeName={authObj.rec_count} 
-        />
-      );
-
-      // Set the state of the keywords list to the value returned by the HTTP response from the server.
-      this.setState({
-        topAuthorResults: a
+      authList.forEach((item, i) => {
+        topAuthors.push(createDataTwoElem(item.Author, item.rec_count));
       });
     }, err => {
       // Print the error if there is one.
@@ -126,19 +114,8 @@ export default class Home extends React.Component {
     }).then(recipeList => {
       if (!recipeList) return;
 
-      // Map each keyword in this.state.keywords to an HTML element:
-      // A button which triggers the showMovies function for each keyword.
-      const r = recipeList.map((recObj, i) =>
-        <HomeReviewsList 
-          RecipeID={recObj.RecipeID}
-          RecipeName={recObj.RecipeName} 
-          ReviewCount={recObj.Rating_time_ratio}
-        />
-      );
-
-      // Set the state of the keywords list to the value returned by the HTTP response from the server.
-      this.setState({
-        topRatioResults: r
+      recipeList.forEach((item, i) => {
+        topRatio.push(createDataThreeElem(item.RecipeID, item.RecipeName, item.Rating_time_ratio));
       });
     }, err => {
       // Print the error if there is one.
@@ -173,103 +150,185 @@ export default class Home extends React.Component {
       console.log(err);
     });
 
+
+
+
   };
 
 
   render() {    
-
     return (
-      <div className="Dashboard">
-
+      
+      <div className="content">
         <PageNavbar active="dashboard" />
+          <Row>
+            <Col md="12">
+              <Card>
+                <CardHeader>
+                  <CardTitle tag="h4">Top 10 Rated Recipes</CardTitle>
+                  <p className="card-category">
+                    Recipes with an average rating at least 4.5/5
+                  </p>
+                </CardHeader>
+                <CardBody>
+                  <Table responsive>
+                    <thead className="text-primary">
+                      <tr>
+                        <th className="text-left">ID</th>
+                        <th>Name</th>
+                        <th>Photo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(topRecipes).map((topRecipes) => (
+                        <tr key={topRecipes.recipeID}>
+                          <td component="th" scope="row">
+                            {topRecipes.recipeID}
+                          </td>
+                          <td>{topRecipes.value}</td>
+                          <td><img src={topRecipes.value2} alt="" border="3" width="150" heigth="150"></img></td> 
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
 
-        <div className="container movies-container">
-          <div className="jumbotron">
-            <div className="h5">Top 10 Rated Recipes</div>
-              <div className="movies-container">
-              <div className="movies-header">
-                <div className="header"><strong>RecipeID</strong></div>
-                <div className="header-lg"><strong>Name</strong></div>
-              </div>
-              <div className="results-container" id="results">
-                {this.state.topRecipeResults}
-              </div>
-            </div>
-          </div>
-        </div>
+        <Row>
+          <table align="center">
+            <tr><td>
+              <Col md="12">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle tag="h4">Top 10 Recipes with Most Reviews</CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                      <Table responsive>
+                        <thead className="text-primary">
+                          <tr>
+                            <th className="text-left">ID</th>
+                            <th>Name</th>
+                            <th>Count</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(topReviews).map((topReviews) => (
+                            <tr key={topReviews.recipeID}>
+                              <td component="th" scope="row">
+                                {topReviews.recipeID}
+                              </td>
+                              <td>{topReviews.value}</td>
+                              <td>{topReviews.value2}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </CardBody>
+                  </Card>
+                </Col>
+            </td><td>
+              <Col md="12">
+                <Card>
+                  <CardHeader>
+                    <CardTitle tag="h4">Top 10 Authors with Most Recipes</CardTitle>
+                  </CardHeader>
+                  <CardBody>
+                    <Table responsive>
+                      <thead className="text-primary">
+                        <tr>
+                          <th className="text-left">Author</th>
+                          <th>Count</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(topAuthors).map((topAuthors) => (
+                          <tr key={topAuthors.recipeID}>
+                            <td component="th" scope="row">
+                              {topAuthors.recipeID}
+                            </td>
+                            <td>{topAuthors.value}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </CardBody>
+                </Card>
+              </Col>
+            </td></tr>
+          </table> 
+        </Row>
 
-        <br />
-
-        <div className="container movies-container">
-          <div className="jumbotron">
-            <div className="h5">Top 10 Recipes with Most Reviews</div>
-              <div className="movies-container">
-              <div className="movies-header">
-                <div className="header"><strong>RecipeID</strong></div>
-                <div className="header-lg"><strong>Name</strong></div>
-                <div className="header"><strong>Reviews Count</strong></div>
-              </div>
-              <div className="results-container" id="results">
-                {this.state.topReviewResults}
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <br />
-
-        <div className="container movies-container">
-          <div className="jumbotron">
-            <div className="h5">Top 10 Authors with Most Recipes</div>
-              <div className="movies-container">
-              <div className="movies-header">
-                <div className="header-lg"><strong>Author</strong></div>
-                <div className="header"><strong>Recipes Count</strong></div>
-              </div>
-              <div className="results-container" id="results">
-                {this.state.topAuthorResults}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <br />
-
-        <div className="container movies-container">
-          <div className="jumbotron">
-            <div className="h5">Top 10 Recipes with Best Rating-to-Time</div>
-              <div className="movies-container">
-              <div className="movies-header">
-                <div className="header"><strong>RecipeID</strong></div>
-                <div className="header-lg"><strong>Name</strong></div>
-                <div className="header"><strong>Rating-to-Time Ratio</strong></div>
-              </div>
-              <div className="results-container" id="results">
-                {this.state.topRatioResults}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <br />
-
-        <div className="container movies-container">
-          <div className="jumbotron">
-            <div className="h5">Top 10 Recipes with Best Rating-to-Time that Use an Oven</div>
-              <div className="movies-container">
-              <div className="movies-header">
-                <div className="header"><strong>RecipeID</strong></div>
-                <div className="header-lg"><strong>Name</strong></div>
-              </div>
-              <div className="results-container" id="results">
-                {this.state.topOvenResults}
-              </div>
-            </div>
-          </div>
-        </div>
-
-
+        <Row>
+          <table align="center">
+            <tr><td>
+              <Col md="12">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle tag="h4">Top 10 Recipes With Best Rating-to-Time</CardTitle>
+                        <p className="card-category">
+                          Recipes that have a high rating and take the least time
+                        </p>
+                    </CardHeader>
+                    <CardBody>
+                      <Table responsive>
+                        <thead className="text-primary">
+                          <tr>
+                            <th className="text-left">ID</th>
+                            <th>Name</th>
+                            <th>Ratio</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(topRatio).map((topRatio) => (
+                            <tr key={topRatio.recipeID}>
+                              <td component="th" scope="row">
+                                {topRatio.recipeID}
+                              </td>
+                              <td>{topRatio.value}</td>
+                              <td>{topRatio.value2}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </CardBody>
+                  </Card>
+                </Col>
+            </td><td>
+              <Col md="12">
+                <Card>
+                  <CardHeader>
+                    <CardTitle tag="h4">Top 10 Recipes Best Rating-to-Time</CardTitle>
+                      <p className="card-category">
+                          Best Rating-to-Time Recipes that use an oven
+                      </p>
+                  </CardHeader>
+                  <CardBody>
+                    <Table responsive>
+                      <thead className="text-primary">
+                        <tr>
+                          <th className="text-left">ID</th>
+                          <th>Author</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(topAuthors).map((topAuthors) => (
+                          <tr key={topAuthors.recipeID}>
+                            <td component="th" scope="row">
+                              {topAuthors.recipeID}
+                            </td>
+                            <td>{topAuthors.value}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  </CardBody>
+                </Card>
+              </Col>
+            </td></tr>
+          </table>
+        </Row>
       </div>
 
     );

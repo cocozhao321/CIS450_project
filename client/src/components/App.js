@@ -9,6 +9,11 @@ import Calories from './Calories';
 import Account from './Account';
 import Search from './Search';
 
+import "bootstrap/dist/css/bootstrap.css";
+import "./assets/scss/paper-dashboard.scss?v=1.2.0";
+import "./assets/demo/demo.css";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
+
 export default class App extends React.Component {
 
 	render() {
@@ -34,7 +39,7 @@ export default class App extends React.Component {
 							path="/search"
 							render={() => <Search />}
 						/>
-            <Route
+            			<Route
 							path="/account"
 							render={() => <Account />}
 						/>

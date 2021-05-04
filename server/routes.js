@@ -13,7 +13,7 @@ const connection = mysql.createPool(config);
 const getTopRecipes = (req, res) => {
   // Selects highly rated recipes.
   var query = `
-    SELECT rev.RecipeID, Recipe_name AS RecipeName
+    SELECT rev.RecipeID, Recipe_name AS RecipeName, Recipe_photo
     FROM reviews rev JOIN recipes rec ON rev.RecipeID = rec.RecipeID
     WHERE Avg_Rate >= 4.5
     ORDER BY Avg_Rate
@@ -114,57 +114,7 @@ const getTopOvenRecipes = (req, res) => {
   });
 };
 
-/* ---- Q3a (Best Movies) ---- */
-const getDecades = (req, res) => {
-  var query = `
-  SELECT DISTINCT (FLOOR(Rate)) AS rateBase
-  FROM reviews
-  ORDER BY rateBase DESC;
-  `
-  connection.query(query, function(err, rows, fields) {
-    if (err) console.log(err);
-    else {
-      console.log(rows)
-      res.json(rows);
-    }
-  });
-};
-
-
-/* ---- (Best Movies) ---- */
-const getGenres = (req, res) => {
-  const query = `
-    SELECT DISTINCT ((FLOOR(Review_count/100)) * 100) AS popularBase
-    FROM recipes
-    ORDER BY popularBase ASC;
-  `
-
-  connection.query(query, (err, rows, fields) => {
-    if (err) console.log(err);
-    else res.json(rows);
-  });
-};
-
-const bestMoviesPerDecadeGenre = (req, res) => {
-  var givengenre = req.params.genre;
-  var givendecade = req.params.decade;
-
-  var query = `
-  SELECT Recipe_name, Rate, Review_count, Recipe_photo 
-  FROM recipes reci JOIN reviews rev ON reci.RecipeID = rev.RecipeID 
-  WHERE (FLOOR(Rate)) = ${givendecade} AND ((FLOOR(Review_count/100)) * 100) = ${givengenre}
-  LIMIT 20;
-  `
-  //  ORDER BY Rate DESC
-  //ORDER BY Review_count DESC
-  connection.query(query, (err, rows, fields) => {
-    if (err) console.log(err);
-    else res.json(rows);
-  });
-};
-
-
-/* ---- Q3b (Best Movies) ---- */
+/* ---- Calories---- */
 const calories = (req, res) => {
   var ingredient = req.params.term;
   var query = `
@@ -190,8 +140,5 @@ module.exports = {
   getTopTimeRatioRecipes: getTopTimeRatioRecipes,
   getTopOvenRecipes: getTopOvenRecipes,
 
-  getDecades: getDecades,
-  getGenres: getGenres,
-  bestMoviesPerDecadeGenre: bestMoviesPerDecadeGenre,
   calories: calories
 };
