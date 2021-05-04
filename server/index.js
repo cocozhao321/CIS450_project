@@ -29,7 +29,7 @@ app.get('/recs/:movie', routes.getRecs);
 
 
 /* ---- (Best Movies) ---- */
-app.get('/search/:ingre', routes.filterRecipes);
+app.get('/search/:ingredient/:author/:cooktime/', routes.filterRecipes);
 
 /* ---- Q3b (Best Movies) ---- */
 app.get('/calories/:term/', routes.calories);

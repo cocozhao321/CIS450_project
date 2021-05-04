@@ -101,12 +101,22 @@ const getRecs = (req, res) => {
 
 const filterRecipes = (req, res) => {
   var givenIngre = req.params.ingredient;
+  var givenAuthor = req.params.author;
+  var givenCooktime = req.params.cooktime;
+
+  
   var query = `
-  SELECT Recipe_name, Rate, Recipe_photo
-FROM recipes rp JOIN reviews rv ON rp.RecipeID = rv.RecipeID 
-WHERE rp.Ingredients LIKE '%${givenIngre}%'
-ORDER BY Rate DESC
-LIMIT 20;
+  SELECT DISTINCT r.Recipe_name, r.Recipe_photo, l.Total_time, a.Author, v.Avg_Rate AS Rate
+  FROM recipes r
+  JOIN logistics l ON r.RecipeID = l.RecipeID
+  JOIN recipe_author a ON r.RecipeID = a.RecipeID
+  JOIN recipe_ingredient i ON r.RecipeID = i.RecipeID
+  JOIN reviews v ON r.RecipeID = v.RecipeID
+  WHERE i.Ingredient_list LIKE '%${givenIngre}%'
+  AND a.author LIKE '%${givenAuthor}%'
+  AND l.Total_time < ${givenCooktime}
+  ORDER BY Rate DESC
+  LIMIT 15;
   `
   connection.query(query, (err, rows, fields) => {
     if (err) console.log(err);
