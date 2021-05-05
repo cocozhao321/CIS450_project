@@ -74,6 +74,18 @@ export default class Home extends React.Component {
       recipeList.forEach((item, i) => {
         topReviews.push(createDataThreeElem(item.RecipeID, item.RecipeName, item.ReviewCount));
       });
+
+      const a = recipeList.map((recObj, i) =>
+      <DashboardMovieRow 
+        RecipeID={recObj.RecipeID}
+        RecipeName={recObj.RecipeName} 
+      />
+      );
+
+      // Set the state of the keywords list to the value returned by the HTTP response from the server.
+      this.setState({
+        topOvenResults: a
+      });
     }, err => {
       // Print the error if there is one.
       console.log(err);
