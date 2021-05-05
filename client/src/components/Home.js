@@ -1,7 +1,7 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import DashboardMovieRow from './DashboardMovieRow';
-
+import '../style/BestMovies.css';
 import "bootstrap/dist/css/bootstrap.css";
 import "./assets/scss/paper-dashboard.scss?v=1.2.0";
 import "./assets/demo/demo.css";
@@ -186,6 +186,7 @@ export default class Home extends React.Component {
     return (
       
       <div className="content">
+        <div className="tablebk" >
         <PageNavbar active="dashboard" />
           <Row>
             <Col md="12">
@@ -355,6 +356,7 @@ export default class Home extends React.Component {
             </td></tr>
           </table>
         </Row>
+        </div> 
       </div>
 
     );

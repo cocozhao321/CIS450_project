@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
 import KeywordButton from './KeywordButton';
 import DashboardMovieRow from './DashboardMovieRow';
+import '../style/BestMovies.css';
 
 export default class Account extends React.Component {
   constructor(props) {
@@ -94,7 +95,7 @@ export default class Account extends React.Component {
   render() {    
     return (
       <div className="Dashboard">
-
+      <div className="lemonbk" >
         <PageNavbar active="dashboard" />
 
         <br />
@@ -120,6 +121,7 @@ export default class Account extends React.Component {
             </div>
           </div>
         </div>
+      </div>
       </div>
     );
   };
