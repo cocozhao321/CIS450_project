@@ -3,7 +3,6 @@ import PageNavbar from './PageNavbar';
 import SearchRow from './SearchRow';
 import '../style/BestMovies.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-//import background from "../style/foodbk.jpeg";
 
 export default class Search extends React.Component {
 	constructor(props) {
@@ -78,15 +77,9 @@ export default class Search extends React.Component {
         
 				<div className="search">
           <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
-          <br></br>
 						<div className="h5">Customized Filter</div>
             <br></br>
-            <p id="filtering">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Results will rank in rating order from high to low ｡◕ ‿ ◕｡</p>
+            <p class="filtering">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Results will rank in rating order from high to low ｡◕ ‿ ◕｡</p>
             <div className="filters">
               <input type='text' placeholder="Author " value={this.state.selectedAuthor} onChange={this.handleAuthorChange}/>
               <input type='text' placeholder="Ingredient " value={this.state.selectedIngre} onChange={this.handleIngreChange}/>

@@ -17,15 +17,19 @@
 }
 
 .h5 { 
-  color: black; font-family: 'Trocchi', serif; font-size: 38px; font-weight: bold; line-height: 40px; margin: 0; 
+  color: black; font-family: 'Trocchi', serif; font-size: 38px; font-weight: bold; text-align: center; 
 }
 
 .filtering { 
-  color: black; font-family: 'Source Sans Pro', sans-serif; font-size: 20px; font-weight: bold; line-height: 30px; margin: 0 0 24px; 
+  color: black; align-items: center; font-family: 'Source Sans Pro', sans-serif; font-size: 15px; text-align: center; 
 }
 
 .filters {
+  display: grid;
+  grid-template-columns: 150px 150px 170px 150px;
+  grid-gap: 10px;
   align-items: center;
+  justify-content: center;
 }
 
 .background {
