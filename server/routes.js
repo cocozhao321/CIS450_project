@@ -141,13 +141,13 @@ const filterRecipes = (req, res) => {
   
   var query = `
   SELECT DISTINCT r.Recipe_name, r.Recipe_photo, l.Total_time, a.Author, v.Avg_Rate AS Rate
-  FROM recipes r
-  JOIN logistics l ON r.RecipeID = l.RecipeID
-  JOIN recipe_author a ON r.RecipeID = a.RecipeID
-  JOIN recipe_ingredient i ON r.RecipeID = i.RecipeID
-  JOIN reviews v ON r.RecipeID = v.RecipeID
-  WHERE i.Ingredient_list LIKE '%${givenIngre}%'
-  AND a.author LIKE '%${givenAuthor}%'
+  FROM Recipes r
+  JOIN Directions l ON r.RecipeID = l.RecipeID
+  JOIN Recipe_author a ON r.RecipeID = a.RecipeID
+  JOIN Ingredients i ON r.RecipeID = i.RecipeID
+  JOIN Reviews v ON r.RecipeID = v.RecipeID
+  WHERE i.Ingredient LIKE '%${givenIngre}%'
+  AND a.Author LIKE '%${givenAuthor}%'
   AND l.Total_time < ${givenCooktime}
   ORDER BY Rate DESC
   LIMIT 15;
