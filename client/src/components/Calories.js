@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import BestRecipesRow from './BestRecipesRow';
 import PageNavbar from './PageNavbar';
+import '../style/BestMovies.css';
 // Main component
 export default class Calories extends React.Component {
   state = {
@@ -125,6 +126,7 @@ export default class Calories extends React.Component {
   render() {
     let allItems = this.getItems();
     return (
+      <div className="whitebk" >
       <div className="calories">
         <PageNavbar active="bestgenres" />
         <p id="calorie_instructions">Enter an ingredient below to view its nutritional contents and get highly rated recipe recommendations!</p>
@@ -135,6 +137,7 @@ export default class Calories extends React.Component {
         <div className="recipes-container" id="results">
 			          {this.state.recipes.length > 1 ? this.state.recipes : "No recipes seem to include this ingredient..."}
 			  </div>
+      </div>
       </div>
     );
   }

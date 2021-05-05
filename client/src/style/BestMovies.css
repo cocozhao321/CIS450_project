@@ -54,3 +54,31 @@
 .name .rating .author .cooktime {
   color:black; font-size: 30px; font-family: "Libre Baskerville", serif; line-height: 45px; text-shadow: 0 1px 1px #fff;
 }
+
+
+.whitebk {
+  background-image: url("../style/white.jpeg");
+  min-height: 2000px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.lemonbk {
+  background-image: url("../style/lemon.jpg");
+  min-height: 2000px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.tablebk {
+  background-image: url("../style/table.jpg");
+  min-height: 3000px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
