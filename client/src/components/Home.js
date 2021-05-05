@@ -19,7 +19,7 @@ import {
 } from "reactstrap";
 
 
-const topRecipes = [], topReviews = [], topAuthors = [], topRatio =[];
+const topRecipes = [], topReviews = [], topAuthors = [], topRatio =[], topOven = [];
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -117,22 +117,6 @@ export default class Home extends React.Component {
       recipeList.forEach((item, i) => {
         topRatio.push(createDataThreeElem(item.RecipeID, item.RecipeName, item.Rating_time_ratio));
       });
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    });
-
-    fetch("http://localhost:8081/topOvenRecipes",
-    {
-      method: 'GET' // The type of HTTP request.
-    }).then(res => {
-      // Convert the response data to a JSON.
-      return res.json();
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    }).then(recipeList => {
-      if (!recipeList) return;
 
       const a = recipeList.map((recObj, i) =>
         <DashboardMovieRow 
@@ -150,8 +134,39 @@ export default class Home extends React.Component {
       console.log(err);
     });
 
+    fetch("http://localhost:8081/topOvenRecipes",
+    {
+      method: 'GET' // The type of HTTP request.
+    }).then(res => {
+      // Convert the response data to a JSON.
+      return res.json();
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    }).then(recipeList => {
+      if (!recipeList) return;
+      
+      recipeList.forEach((item, i) => {
+        topOven.push(createDataTwoElem(item.RecipeID, item.RecipeName));
+      });
 
+      console.log(topOven[0]);
 
+      const a = recipeList.map((recObj, i) =>
+        <DashboardMovieRow 
+          RecipeID={recObj.RecipeID}
+          RecipeName={recObj.RecipeName} 
+        />
+      );
+
+      // Set the state of the keywords list to the value returned by the HTTP response from the server.
+      this.setState({
+        topOvenResults: a
+      });
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    });
 
   };
 
@@ -299,8 +314,8 @@ export default class Home extends React.Component {
               <Col md="12">
                 <Card>
                   <CardHeader>
-                    <CardTitle tag="h4">Top 10 Recipes Best Rating-to-Time</CardTitle>
-                      <p className="card-category">
+                    <CardTitle tag="h4">Top 10 Recipes that use an oven</CardTitle>
+                      <p className="card-categor y">
                           Best Rating-to-Time Recipes that use an oven
                       </p>
                   </CardHeader>
@@ -309,16 +324,16 @@ export default class Home extends React.Component {
                       <thead className="text-primary">
                         <tr>
                           <th className="text-left">ID</th>
-                          <th>Author</th>
+                          <th>Name</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {(topAuthors).map((topAuthors) => (
-                          <tr key={topAuthors.recipeID}>
+                        {(topOven).map((topOven) => (
+                          <tr key={topOven.recipeID}>
                             <td component="th" scope="row">
-                              {topAuthors.recipeID}
+                              {topOven.recipeID}
                             </td>
-                            <td>{topAuthors.value}</td>
+                            <td>{topOven.value}</td>
                           </tr>
                         ))}
                       </tbody>
