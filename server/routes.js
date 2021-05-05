@@ -14,7 +14,7 @@ const getTopRecipes = (req, res) => {
   // Selects highly rated recipes.
   var query = `
     SELECT rev.RecipeID, Recipe_name AS RecipeName, Recipe_photo
-    FROM reviews rev JOIN recipes rec ON rev.RecipeID = rec.RecipeID
+    FROM Reviews rev JOIN Recipes rec ON rev.RecipeID = rec.RecipeID
     WHERE Avg_Rate >= 4.5
     ORDER BY Avg_Rate
     LIMIT 10;
@@ -33,7 +33,7 @@ const getTopReviews = (req, res) => {
   // Selects highly rated recipes.
   var query = `
     SELECT rev.RecipeID, Recipe_name AS RecipeName, Review_count AS ReviewCount
-    FROM recipes rec JOIN reviews rev ON rec.RecipeID = rev.RecipeID
+    FROM Recipes rec JOIN Reviews rev ON rec.RecipeID = rev.RecipeID
     ORDER BY Review_count DESC
     LIMIT 10;
   `;
@@ -51,7 +51,7 @@ const getTopAuthors = (req, res) => {
   var query = `
     WITH highlyRated AS
     (SELECT rev.RecipeID, auth.Author
-    FROM reviews rev JOIN recipe_author auth ON rev.RecipeID = auth.RecipeID
+    FROM Reviews rev JOIN Recipe_author auth ON rev.RecipeID = auth.RecipeID
     WHERE Avg_Rate >= 4.5)
     SELECT Author, COUNT(RecipeID) AS rec_count
     FROM highlyRated
@@ -74,10 +74,10 @@ const getTopTimeRatioRecipes = (req, res) => {
   var query = `
     WITH withRating AS
     (SELECT rec.RecipeID, Recipe_name, Avg_Rate
-    FROM recipes rec JOIN reviews rev ON rec.RecipeID = rev.RecipeID)
+    FROM Recipes rec JOIN Reviews rev ON rec.RecipeID = rev.RecipeID)
 
     SELECT withRating.RecipeID, Recipe_name AS RecipeName, ROUND(Avg_Rate/Total_time, 2) AS Rating_time_ratio
-    FROM withRating JOIN logistics ON withRating.RecipeID = logistics.RecipeID 
+    FROM withRating JOIN Directions ON withRating.RecipeID = Directions.RecipeID 
     ORDER BY Rating_time_ratio DESC
     LIMIT 10;
   `;
@@ -93,16 +93,14 @@ const getTopTimeRatioRecipes = (req, res) => {
 
 const getTopOvenRecipes = (req, res) => {
   var query = `
-    WITH temp AS 
-    ( SELECT wRating.RecipeID, Recipe_name AS RecipeName, ROUND(Avg_Rate/Total_time, 2) AS Rating_time_ratio, Directions
-      FROM (SELECT rec.RecipeID, Recipe_name, Avg_Rate
-      FROM recipes rec JOIN reviews rev ON rec.RecipeID = rev.RecipeID) wRating JOIN logistics ON wRating.RecipeID = logistics.RecipeID
-      WHERE Directions LIKE '%oven%'
+    SELECT wRating.RecipeID, Recipe_name AS RecipeName, ROUND(Avg_Rate/Total_time, 2) AS Rating_time_ratio, Directions
+    FROM (SELECT rec.RecipeID, rec.Recipe_name, rev.Avg_Rate
+      FROM Recipes rec JOIN Reviews rev ON rec.RecipeID = rev.RecipeID) wRating JOIN 
+      (SELECT RecipeID, Directions, Total_time
+      FROM Directions
+      WHERE Directions LIKE '%oven%') dir ON wRating.RecipeID = dir.RecipeID
       ORDER BY Rating_time_ratio DESC
-      LIMIT 10
-    )
-    SELECT t.RecipeID, RecipeName
-    FROM temp t;
+    LIMIT 10;
   `;
 
   connection.query(query, function(err, rows, fields) {
