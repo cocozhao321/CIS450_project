@@ -13,10 +13,10 @@ const connection = mysql.createPool(config);
 const getTopRecipes = (req, res) => {
   // Selects highly rated recipes.
   var query = `
-    SELECT rev.RecipeID, Recipe_name AS Name
-    FROM project_db.reviews rev JOIN project_db.recipes rec ON rev.RecipeID = rec.RecipeID
-    WHERE Rate >= 4.5
-    ORDER BY Rate
+    SELECT rev.RecipeID, Recipe_name AS RecipeName, Recipe_photo
+    FROM reviews rev JOIN recipes rec ON rev.RecipeID = rec.RecipeID
+    WHERE Avg_Rate >= 4.5
+    ORDER BY Avg_Rate
     LIMIT 10;
   `;
 
@@ -32,10 +32,10 @@ const getTopRecipes = (req, res) => {
 const getTopReviews = (req, res) => {
   // Selects highly rated recipes.
   var query = `
-    SELECT rev.RecipeID, Recipe_name AS Name, Review_count AS Review_Count
+    SELECT rev.RecipeID, Recipe_name AS RecipeName, Review_count AS ReviewCount
     FROM recipes rec JOIN reviews rev ON rec.RecipeID = rev.RecipeID
     ORDER BY Review_count DESC
-    LIMIT 20;
+    LIMIT 10;
   `;
 
   connection.query(query, function(err, rows, fields) {
@@ -50,9 +50,9 @@ const getTopReviews = (req, res) => {
 const getTopAuthors = (req, res) => {
   var query = `
     WITH highlyRated AS
-    (SELECT rev.RecipeID, rec.Author
-    FROM reviews rev JOIN recipes rec ON rev.RecipeID = rec.RecipeID
-    WHERE Rate >= 4.5)
+    (SELECT rev.RecipeID, auth.Author
+    FROM reviews rev JOIN recipe_author auth ON rev.RecipeID = auth.RecipeID
+    WHERE Avg_Rate >= 4.5)
     SELECT Author, COUNT(RecipeID) AS rec_count
     FROM highlyRated
     GROUP BY Author
@@ -70,25 +70,18 @@ const getTopAuthors = (req, res) => {
 };
 
 
+const getTopTimeRatioRecipes = (req, res) => {
+  var query = `
+    WITH withRating AS
+    (SELECT rec.RecipeID, Recipe_name, Avg_Rate
+    FROM recipes rec JOIN reviews rev ON rec.RecipeID = rev.RecipeID)
 
-/* ---- Q2 (Recommendations) ---- */
-const getRecs = (req, res) => {
-  var inputMovie = req.params.movie;
-  var query = ` 
-  WITH cast AS 
-  (SELECT ci.cast_id
-  FROM cast_in ci JOIN movie m ON m.movie_id=ci.movie_id
-  WHERE m.title='${inputMovie}'),
-  ourMovies AS
-  (SELECT ci.movie_id, COUNT(*) AS count
-  FROM cast c JOIN cast_in ci ON c.cast_id=ci.cast_id
-  GROUP BY ci.movie_id)
-  SELECT m.title, m.movie_id, m.rating, m.num_ratings
-  FROM ourMovies om JOIN movie m on m.movie_id=om.movie_id
-  WHERE m.title !='${inputMovie}'
-  ORDER BY om.count DESC, rating DESC, num_ratings DESC
-  LIMIT 10;
-  `
+    SELECT withRating.RecipeID, Recipe_name AS RecipeName, ROUND(Avg_Rate/Total_time, 2) AS Rating_time_ratio
+    FROM withRating JOIN logistics ON withRating.RecipeID = logistics.RecipeID 
+    ORDER BY Rating_time_ratio DESC
+    LIMIT 10;
+  `;
+
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
     else {
@@ -98,41 +91,37 @@ const getRecs = (req, res) => {
   });
 };
 
-
-const filterRecipes = (req, res) => {
-  var givenIngre = req.params.ingredient;
-  var givenAuthor = req.params.author;
-  var givenCooktime = req.params.cooktime;
-
-  
+const getTopOvenRecipes = (req, res) => {
   var query = `
-  SELECT DISTINCT r.Recipe_name, r.Recipe_photo, l.Total_time, a.Author, v.Avg_Rate AS Rate
-  FROM recipes r
-  JOIN logistics l ON r.RecipeID = l.RecipeID
-  JOIN recipe_author a ON r.RecipeID = a.RecipeID
-  JOIN recipe_ingredient i ON r.RecipeID = i.RecipeID
-  JOIN reviews v ON r.RecipeID = v.RecipeID
-  WHERE i.Ingredient_list LIKE '%${givenIngre}%'
-  AND a.author LIKE '%${givenAuthor}%'
-  AND l.Total_time < ${givenCooktime}
-  ORDER BY Rate DESC
-  LIMIT 15;
-  `
-  connection.query(query, (err, rows, fields) => {
+    WITH temp AS 
+    ( SELECT wRating.RecipeID, Recipe_name AS RecipeName, ROUND(Avg_Rate/Total_time, 2) AS Rating_time_ratio, Directions
+      FROM (SELECT rec.RecipeID, Recipe_name, Avg_Rate
+      FROM recipes rec JOIN reviews rev ON rec.RecipeID = rev.RecipeID) wRating JOIN logistics ON wRating.RecipeID = logistics.RecipeID
+      WHERE Directions LIKE '%oven%'
+      ORDER BY Rating_time_ratio DESC
+      LIMIT 10
+    )
+    SELECT t.RecipeID, RecipeName
+    FROM temp t;
+  `;
+
+  connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
-    else res.json(rows);
+    else {
+      console.log(rows)
+      res.json(rows);
+    }
   });
 };
 
-
-/* ---- Q3b (Best Movies) ---- */
+/* ---- Calories---- */
 const calories = (req, res) => {
   var ingredient = req.params.term;
   var query = `
-  SELECT Recipe_name, Avg_Rate AS Rate, Recipe_photo
-FROM recipes rp JOIN reviews rv ON rp.RecipeID = rv.RecipeID JOIN recipe_ingredient ri ON ri.RecipeID = rv.RecipeID
-WHERE ri.Ingredient_list LIKE '%${ingredient}%'
-ORDER BY Avg_Rate DESC
+  SELECT Recipe_name, Rate, Recipe_photo
+FROM recipes rp JOIN reviews rv ON rp.RecipeID = rv.RecipeID 
+WHERE rp.Ingredients LIKE '%${ingredient}%'
+ORDER BY Rate DESC
 LIMIT 5;
   `
   connection.query(query, function(err, rows, fields) {
@@ -148,8 +137,8 @@ module.exports = {
   getTopRecipes: getTopRecipes,
   getTopReviews: getTopReviews,
   getTopAuthors: getTopAuthors,
+  getTopTimeRatioRecipes: getTopTimeRatioRecipes,
+  getTopOvenRecipes: getTopOvenRecipes,
 
-	getRecs: getRecs,
-  filterRecipes: filterRecipes,
   calories: calories
 };

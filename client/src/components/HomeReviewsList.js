@@ -8,8 +8,8 @@ export default class HomeReviewsList extends React.Component {
 		return (
 			<div className="movie">
 				<div className="RecipeID">{this.props.RecipeID}</div>
-				<div className="Name"> {this.props.Name} </div>
-				<div className="Review_Count"> {this.props.Review_Count} </div>
+				<div className="RecipeName"> {this.props.RecipeName} </div>
+				<div className="ReviewCount"> {this.props.ReviewCount} </div>
 			</div>
 		);
 	};
