@@ -118,11 +118,11 @@ const getTopOvenRecipes = (req, res) => {
 const calories = (req, res) => {
   var ingredient = req.params.term;
   var query = `
-  SELECT Recipe_name, Rate, Recipe_photo
-FROM recipes rp JOIN reviews rv ON rp.RecipeID = rv.RecipeID 
-WHERE rp.Ingredients LIKE '%${ingredient}%'
-ORDER BY Rate DESC
-LIMIT 5;
+    SELECT Recipe_name, Avg_Rate AS Rate, Recipe_photo
+    FROM recipes rp JOIN reviews rv ON rp.RecipeID = rv.RecipeID JOIN recipe_ingredient ri ON ri.RecipeID = rv.RecipeID
+    WHERE ri.Ingredient_list LIKE '%${ingredient}%'
+    ORDER BY Avg_Rate DESC
+    LIMIT 5;
   `
   connection.query(query, function(err, rows, fields) {
     if (err) console.log(err);
@@ -133,6 +133,31 @@ LIMIT 5;
   });
 };
 
+const filterRecipes = (req, res) => {
+  var givenIngre = req.params.ingredient;
+  var givenAuthor = req.params.author;
+  var givenCooktime = req.params.cooktime;
+
+  
+  var query = `
+  SELECT DISTINCT r.Recipe_name, r.Recipe_photo, l.Total_time, a.Author, v.Avg_Rate AS Rate
+  FROM recipes r
+  JOIN logistics l ON r.RecipeID = l.RecipeID
+  JOIN recipe_author a ON r.RecipeID = a.RecipeID
+  JOIN recipe_ingredient i ON r.RecipeID = i.RecipeID
+  JOIN reviews v ON r.RecipeID = v.RecipeID
+  WHERE i.Ingredient_list LIKE '%${givenIngre}%'
+  AND a.author LIKE '%${givenAuthor}%'
+  AND l.Total_time < ${givenCooktime}
+  ORDER BY Rate DESC
+  LIMIT 15;
+  `
+  connection.query(query, (err, rows, fields) => {
+    if (err) console.log(err);
+    else res.json(rows);
+  });
+};
+
 module.exports = {
   getTopRecipes: getTopRecipes,
   getTopReviews: getTopReviews,
@@ -140,5 +165,6 @@ module.exports = {
   getTopTimeRatioRecipes: getTopTimeRatioRecipes,
   getTopOvenRecipes: getTopOvenRecipes,
 
-  calories: calories
+  calories: calories,
+  filterRecipes: filterRecipes
 };

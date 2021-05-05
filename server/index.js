@@ -31,6 +31,8 @@ app.get('/topOvenRecipes', routes.getTopOvenRecipes);
 
 app.get('/calories/:term/', routes.calories);
 
+app.get('/search/:ingredient/:author/:cooktime/', routes.filterRecipes);
+
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);

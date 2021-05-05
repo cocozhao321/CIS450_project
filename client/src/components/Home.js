@@ -1,7 +1,6 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import DashboardMovieRow from './DashboardMovieRow';
-import HomeReviewsList from './HomeReviewsList';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./assets/scss/paper-dashboard.scss?v=1.2.0";
