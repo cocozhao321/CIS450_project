@@ -161,8 +161,6 @@ export default class Home extends React.Component {
         topOven.push(createDataTwoElem(item.RecipeID, item.RecipeName));
       });
 
-      console.log(topOven[0]);
-
       const a = recipeList.map((recObj, i) =>
         <DashboardMovieRow 
           RecipeID={recObj.RecipeID}
