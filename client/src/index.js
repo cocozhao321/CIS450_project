@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';  
+import "./components/assets/scss/paper-dashboard.scss?v=1.2.0";
+import "./components/assets/demo/demo.css";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
+
+//import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 

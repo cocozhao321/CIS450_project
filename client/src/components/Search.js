@@ -1,6 +1,6 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
-import BestMoviesRow from './BestMoviesRow';
+import SearchRow from './SearchRow';
 import '../style/BestMovies.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -9,150 +9,90 @@ export default class Search extends React.Component {
 		super(props);
 
 		this.state = {
-			selectedDecade: "",
-			selectedGenre: "Action",
-			decades: [],
-			genres: [],
-			movies: []
+			selectedIngre: "",
+      selectedAuthor: "",
+      selectedCookTime: "",
+      recipes: []
 		};
 
-		this.submitDecadeGenre = this.submitDecadeGenre.bind(this);
-		this.handleDecadeChange = this.handleDecadeChange.bind(this);
-		this.handleGenreChange = this.handleGenreChange.bind(this);
+		this.submitFilters = this.submitFilters.bind(this);
+		this.handleIngreChange = this.handleIngreChange.bind(this);
+    this.handleAuthorChange = this.handleAuthorChange.bind(this);
+    this.handleTimeChange = this.handleTimeChange.bind(this);
 	};
 
-	/* ---- Q3a (Best Movies) ---- */
-	componentDidMount() {
-		// Send an HTTP request to the server.
-    fetch("http://localhost:8081/decades",
-    {
-      method: 'GET' // The type of HTTP request.
-    }).then(res => {
-      // Convert the response data to a JSON.
-      return res.json();
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    }).then(decadesList => {
-      if (!decadesList) return;
-      const decadeDivs = decadesList.map((decadeObj, i) =>
-      <option className="decadesOption" value={decadeObj.release_year}>{decadeObj.release_year}</option>
-      );
-      // Set the state of the keywords list to the value returned by the HTTP response from the server.
-      this.setState({
-        decades: decadeDivs
-      });
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    });
-    fetch("http://localhost:8081/genres",
-    {
-      method: 'GET' // The type of HTTP request.
-    }).then(res => {
-      // Convert the response data to a JSON.
-      return res.json();
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    }).then(genresList => {
-      if (!genresList) return;
-
-      // Map each movie in this.state.keywords to an HTML element:
-      // A button which triggers the showMovies function for each keyword.
-      const genreDivs = genresList.map((genreObj, i) =>
-      <option className="genresOption" value={genreObj.name}>{genreObj.name}</option>);
-
-      // Set the state of the keywords list to the value returned by the HTTP response from the server.
-      this.setState({
-        genres: genreDivs
-      });
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    });
-	};
-
-	/* ---- Q3a (Best Movies) ---- */
-	handleDecadeChange(e) {
+  
+	handleIngreChange(e) {
 		this.setState({
-      selectedDecade: e.target.value
+      selectedIngre: e.target.value
     });
 	};
 
-	handleGenreChange(e) {
+  handleAuthorChange(e) {
 		this.setState({
-			selectedGenre: e.target.value
-		});
+      selectedAuthor: e.target.value
+    });
 	};
+  
+  handleTimeChange(e) {
+		this.setState({
+      selectedCookTime: e.target.value
+    });
+	};
+  
 
-	/* ---- Q3b (Best Movies) ---- */
-	submitDecadeGenre() {
-    fetch("http://localhost:8081/bestMovies/"+this.state.selectedDecade+'/'+this.state.selectedGenre,
+	submitFilters() {
+    fetch("http://localhost:8081/search/" +this.state.selectedIngre + '/' + this.state.selectedAuthor + '/' + this.state.selectedCookTime,
     {
-      method: 'GET' // The type of HTTP request.
+      method: 'GET'
     }).then(res => {
-      // Convert the response data to a JSON.
       return res.json();
     }, err => {
-      // Print the error if there is one.
       console.log(err);
-    }).then(moviesList => {
-      if (!moviesList) return;
-
-      // Map each keyword in this.state.keywords to an HTML element:
-      // A button which triggers the showMovies function for each keyword.
-      const bestMoviesDivs = moviesList.map((movieObj, i) =>
-        <BestMoviesRow 
-          title={movieObj.title} 
-          id={movieObj.movie_id} 
-          rating={movieObj.rating} 
+    }).then(recipesList => {
+      if (!recipesList) return;
+      const recipeDivs = recipesList.map((recipeObj, i) =>
+        <SearchRow 
+          name={recipeObj.Recipe_name} 
+          img={recipeObj.Recipe_photo} 
+          rating={recipeObj.Rate} 
+          author={recipeObj.Author}
+          totalcooktime={recipeObj.Total_time}
         /> 
       );
 
-      // Set the state of the keywords list to the value returned by the HTTP response from the server.
       this.setState({
-        movies: bestMoviesDivs
+        recipes: recipeDivs
       });
     }, err => {
-      // Print the error if there is one.
       console.log(err);
     });
 	};
 
 	render() {
 		return (
-			<div className="BestMovies">
-				
-				<PageNavbar active="bestgenres" />
-
-				<div className="container bestmovies-container">
-					<div className="jumbotron">
-						<div className="h5">Best Movies</div>
-						<div className="dropdown-container">
-							<select value={this.state.selectedDecade} onChange={this.handleDecadeChange} className="dropdown" id="decadesDropdown">
-                {this.state.decades}
-							</select>
-							<select value={this.state.selectedGenre} onChange={this.handleGenreChange} className="dropdown" id="genresDropdown">
-								{this.state.genres}
-							</select>
-							<button className="submit-btn" id="submitBtn" onClick={this.submitDecadeGenre}>Submit</button>
+      <div className="background" >
+			<div className="Search">	
+				<PageNavbar active="search" />
+        
+				<div className="search">
+          <br></br>
+						<div className="h5">Customized Filter</div>
+            <br></br>
+            <p class="filtering">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Results will rank in rating order from high to low ｡◕ ‿ ◕｡</p>
+            <div className="filters">
+              <input type='text' placeholder="Author " value={this.state.selectedAuthor} onChange={this.handleAuthorChange}/>
+              <input type='text' placeholder="Ingredient " value={this.state.selectedIngre} onChange={this.handleIngreChange}/>
+							<input type="text" pattern="[0-9]*" placeholder="Cooktime in minutes " value={this.state.selectedCookTime} onChange={this.handleTimeChange}/>
+              <button id="submitMovieBtn" className="submit-btn" onClick={this.submitFilters}>Find your recipe!</button>
 						</div>
-					</div>
-					<div className="jumbotron">
-						<div className="movies-container">
-							<div className="movie">
-			          <div className="header"><strong>Title</strong></div>
-			          <div className="header"><strong>Movie ID</strong></div>
-								<div className="header"><strong>Rating</strong></div>
-			        </div>
-			        <div className="movies-container" id="results">
-			          {this.state.movies}
-			        </div>
-			      </div>
-			    </div>
-			  </div>
+            <br></br>
+            <div className="gridcontainer">
+              {this.state.recipes}
+						</div>
+        </div>
 			</div>
+      </div>
 		);
 	};
 };

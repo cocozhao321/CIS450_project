@@ -84,15 +84,6 @@ body {
 .items::-webkit-scrollbar-thumb{
   background-color: #0F0F0F;
 }
-<<<<<<< HEAD
-h1 {
-    text-align:center;
-    color:white;
-}
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-=======
 
 
 .items{
@@ -181,7 +172,6 @@ code {
   text-align: center;
   font-size: 24px;
   animation: poof .5s;
->>>>>>> 9ba300b762e1d18098226c39ece7fc8144377bdb
 }
 
 
@@ -201,4 +191,24 @@ code {
     opacity: 1;
     transform: translateY(0px)
   }
+}
+
+.img {
+  height: 100px;
+}
+
+div.recipes-container {
+  display: inline-block; 
+  text-align:center;
+}
+
+div.recipeResults {
+  display: inline-block; 
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 25px;
+}
+
+div.calories {
+  text-align: center;
 }

@@ -1,43 +1,55 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Navbar, Container, NavbarBrand, NavbarToggler, Collapse, Nav, NavItem, NavLink } from 'reactstrap';
 
-export default class PageNavbar extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			navDivs: []
-		};
-	};
-
-	componentDidMount() {
-		const pageList = ['home', 'search', 'calories', 'account'];
-
-		let navbarDivs = pageList.map((page, i) => {
-			if (this.props.active === page) {
-				return <a className="nav-item nav-link active" key={i} href={"/" + page}>{page.charAt(0).toUpperCase() + page.substring(1, page.length)}</a>
-			} else {
-				return <a className="nav-item nav-link" key={i} href={"/" + page}>{page.charAt(0).toUpperCase() + page.substring(1, page.length)}</a>
-			}
-		});
-
-		this.setState({
-			navDivs: navbarDivs
-		});
-	};
-
-	render() {
-		return (
-			<div className="PageNavbar">
-				<nav className="navbar navbar-expand-lg navbar-light bg-light">
-			      <span className="navbar-brand center">Project Name</span>
-			      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-			        <div className="navbar-nav">
-			        	{this.state.navDivs}
-			        </div>
-			      </div>
-			    </nav>
-			</div>
-    );
-	};
-};
+export default class PageNavbar extends React.Component{
+    constructor(props) {
+        super(props);
+        this.toggle = this.toggle.bind(this);
+        this.state = {
+            isOpen: false,
+        };
+    }
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen
+        });
+    }
+    render(){
+        return(
+            <Navbar expand="lg" color="warning">
+                <Container>
+                    <NavbarBrand>Stay Home and Eat Well</NavbarBrand>
+                    <NavbarToggler onClick={this.toggle}>
+                        <span className="navbar-toggler-bar navbar-kebab"></span>
+                        <span className="navbar-toggler-bar navbar-kebab"></span>
+                        <span className="navbar-toggler-bar navbar-kebab"></span>
+                    </NavbarToggler>
+                    <Collapse isOpen={this.state.isOpen} navbar>
+                        <Nav navbar>
+                            <NavItem active>
+                                <NavLink href="/home">
+                                    Home <span className="sr-only">(current)</span>
+                                </NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href="/search">
+                                    Search
+                                </NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href="/calories">
+                                    Calories
+                                </NavLink>
+                            </NavItem>
+							<NavItem>
+                                <NavLink href="/account">
+                                    Account
+                                </NavLink>
+                            </NavItem>
+                        </Nav>
+                    </Collapse>
+                </Container>
+            </Navbar>
+        );
+    }
+}

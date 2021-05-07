@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	BrowserRouter as Router,
 	Route,
@@ -8,24 +8,18 @@ import Home from './Home';
 import Calories from './Calories';
 import Account from './Account';
 import Search from './Search';
-import GoogleLogin from 'react-google-login';
+import Login from './Login/Login';
 
-export default class App extends React.Component {
+import "bootstrap/dist/css/bootstrap.css";
+import "./assets/scss/paper-dashboard.scss?v=1.2.0";
+import "./assets/demo/demo.css";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-	render() {
-	  const responseGoogle = (response) => {
-      console.log(response);
-    }
+function App() {
+
+	//render() {
 		return (
 			<div className="App">
-			<h1>CIS450 Project</h1>
-				<GoogleLogin
-        clientId="308175231537-mle1mv1fo3ltil5am0lf0a3d22mevn8b.apps.googleusercontent.com" 
-        
-        buttonText="LOGIN WITH GOOGLE"
-        onSuccess={responseGoogle}
-        onFailure={responseGoogle}
-      />
 				<Router>
 					<Switch>
 						<Route
@@ -54,5 +48,6 @@ export default class App extends React.Component {
 				</Router>
 			</div>
 		);
-	};
+	//};
 };
+export default App;
