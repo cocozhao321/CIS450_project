@@ -77,7 +77,7 @@ export default class Search extends React.Component {
         
 				<div className="search">
           <br></br>
-						<div className="h5">Customized Filter</div>
+						<h1 className="h5">Customized Filter</h1>
             <br></br>
             <p class="filtering">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Results will rank in rating order from high to low ｡◕ ‿ ◕｡</p>
             <div className="filters">

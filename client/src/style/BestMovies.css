@@ -17,7 +17,8 @@
 }
 
 .h5 { 
-  color: black; font-family: 'Trocchi', serif; font-size: 38px; font-weight: bold; text-align: center; 
+  color: rgb(44, 32, 7); 
+  font-family: 'Helvetica Neue', sans-serif; font-size: 275px; font-weight: bold; letter-spacing: -1px; line-height: 1; text-align: center;  
 }
 
 .filtering { 
