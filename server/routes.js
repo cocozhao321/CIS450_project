@@ -116,9 +116,9 @@ const getTopOvenRecipes = (req, res) => {
 const calories = (req, res) => {
   var ingredient = req.params.term;
   var query = `
-    SELECT Recipe_name, Avg_Rate AS Rate, Recipe_photo
-    FROM recipes rp JOIN reviews rv ON rp.RecipeID = rv.RecipeID JOIN recipe_ingredient ri ON ri.RecipeID = rv.RecipeID
-    WHERE ri.Ingredient_list LIKE '%${ingredient}%'
+    SELECT DISTINCT Recipe_name, Avg_Rate AS Rate, Recipe_photo
+    FROM Recipes rp JOIN Reviews rv ON rp.RecipeID = rv.RecipeID JOIN Ingredients ri ON ri.RecipeID = rv.RecipeID
+    WHERE ri.Ingredient LIKE '%${ingredient}%'
     ORDER BY Avg_Rate DESC
     LIMIT 5;
   `
