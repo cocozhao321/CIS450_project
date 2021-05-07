@@ -187,6 +187,8 @@ export default class Home extends React.Component {
         <div className="tablebk" >
         <PageNavbar active="dashboard" />
           <Row>
+          <table align="center">
+            <tr><td>
             <Col md="12">
               <Card>
                 <CardHeader>
@@ -219,6 +221,8 @@ export default class Home extends React.Component {
                 </CardBody>
               </Card>
             </Col>
+            </td></tr>
+            </table>
           </Row>
 
         <Row>
