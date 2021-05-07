@@ -3,6 +3,7 @@ import React from 'react';
 import BestRecipesRow from './BestRecipesRow';
 import PageNavbar from './PageNavbar';
 import '../style/BestMovies.css';
+import './Calories.css';
 // Main component
 export default class Calories extends React.Component {
   state = {
@@ -100,11 +101,13 @@ export default class Calories extends React.Component {
       // Map each keyword in this.state.keywords to an HTML element:
       // A button which triggers the showMovies function for each keyword.
       const recipeDivs = recipesList.map((recipeObj, i) =>
+      <div class="cal_card">
         <BestRecipesRow 
-          name={recipeObj.Recipe_name} 
-          img={recipeObj.Recipe_photo} 
+          img={recipeObj.Recipe_photo}
+          name={recipeObj.Recipe_name}
           rating={recipeObj.Rate} 
         /> 
+        </div>
       );
 
       // Set the state of the keywords list to the value returned by the HTTP response from the server.
@@ -129,14 +132,13 @@ export default class Calories extends React.Component {
       <div className="whitebk" >
       <div className="calories">
         <PageNavbar active="bestgenres" />
-        <p id="calorie_instructions">Enter an ingredient below to view its nutritional contents and get highly rated recipe recommendations!</p>
+        <h5>Calorie Finder</h5>
+        <p id="calorie_instructions">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Enter an ingredient below to view its nutritional content and get highly rated recipe recommendations! ｡◕ ‿ ◕｡</p>
         <Search sendValue={this.storeValue} sendEnter={this.storeClick} />
-        <div className='items'>
-          { allItems.length === 0 ? <div className='error'>No food found... <i class="fas fa-pizza-slice"></i></div> : allItems }
-        </div>
-        <div className="recipes-container" id="results">
-			          {this.state.recipes.length > 1 ? this.state.recipes : "No recipes seem to include this ingredient..."}
-			  </div>
+        
+          { allItems.length === 0 ? <div className='error'><i class="fas fa-pizza-slice"></i></div> : <div className='items'> {allItems} </div>}
+        
+			          {this.state.recipes.length > 1 ? <div class="flex-container">{this.state.recipes}</div> : "No recipes seem to include this ingredient..."}
       </div>
       </div>
     );
@@ -151,18 +153,24 @@ class Search extends React.Component {
   handleChange = (e) => {
     this.props.sendValue(e.target.value);
   }
+
   keyDown = (event) => {
     if (event.key === 'Enter') {
       this.props.sendEnter();
       console.log('Enter')
     }
   }
+
+  submit = (event) => {
+      this.props.sendEnter();
+  }
   
   render() {
     return (
       <div className="search">
         <div className='search-box'>
-          <input type='text' onChange={this.handleChange} onKeyDown={this.keyDown} placeholder='Enter food...' />
+          <input type='text' onChange={this.handleChange} onKeyDown={this.keyDown} placeholder='Enter an ingredient...' />
+          <button id="submitMovieBtn" className="submit-btn" onClick={this.submit}>Submit</button>
         </div>
       </div>
      )
@@ -186,19 +194,11 @@ class Item extends React.Component {
             </div>
             
             <div className='item-info'>
-              <span className='item-info-a'>Carbs: {this.props.carbs}</span>
-            </div>
-            
-            <div className='item-info'>
               <span className='item-info-a'>Serve (grams): {this.props.serve}</span>
             </div>
             
           <div className='item-row'>
             <div className='item-row-a'>Per serving: {this.props.serve}g</div>
-          </div>
-          
-          <div className='item-row'>
-            <div className='item-row-a'>Calories: {this.props.calories}</div>
           </div>
           
           <div className='item-row'>
