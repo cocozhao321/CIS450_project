@@ -138,7 +138,7 @@ export default class Calories extends React.Component {
         
           { allItems.length === 0 ? <div className='error'><i class="fas fa-pizza-slice"></i></div> : <div className='items'> {allItems} </div>}
         
-			          {this.state.recipes.length > 1 ? <div class="flex-container">{this.state.recipes}</div> : "Did you enter an ingredient? We don't have that ingredient on file..."}
+			          {this.state.recipes.length > 0 ? <div class="flex-container">{this.state.recipes}</div> : "Did you enter an ingredient? We don't have that ingredient on file..."}
       </div>
       </div>
     );

@@ -152,7 +152,7 @@ const filterRecipes = (req, res) => {
   var givenAuthor = req.params.author;
   var givenCooktime = req.params.cooktime;
 
-
+/*
   var query = `
   SELECT DISTINCT r.Recipe_name, r.Recipe_photo, l.Total_time, a.Author, v.Avg_Rate AS Rate, r.RecipeID
   FROM Recipes r
@@ -166,7 +166,25 @@ const filterRecipes = (req, res) => {
   ORDER BY Rate DESC
   LIMIT 15;
   `
+*/
 
+var query = `
+SELECT temp2.RecipeID, temp2.Recipe_name, temp2.Recipe_photo, temp2.Rate, temp2.Author, l.Total_time
+  FROM 
+  ((SELECT temp.RecipeID, temp.Recipe_name, temp.Recipe_photo, temp.Rate, temp.Author
+  FROM 
+  (SELECT Recipes.RecipeID, Recipes.Recipe_name, Recipes.Recipe_photo, Reviews.Avg_Rate AS Rate, Recipe_author.Author
+  FROM Recipes
+  JOIN Recipe_author ON Recipe_author.RecipeID = Recipes.RecipeID
+  JOIN Reviews ON Reviews.RecipeID = Recipes.RecipeID
+  WHERE Recipe_author.Author LIKE '%${givenAuthor}%') temp
+  JOIN Ingredients ingre ON temp.RecipeID = ingre.RecipeID
+  WHERE ingre.Ingredient LIKE '%${givenIngre}%')) temp2
+  JOIN Directions l ON l.RecipeID = temp2.RecipeID
+  WHERE l.Total_time < ${givenCooktime}
+  ORDER BY Rate DESC
+  LIMIT 15;
+  `
   connection.query(query, (err, rows, fields) => {
     if (err) console.log(err);
     else res.json(rows);
