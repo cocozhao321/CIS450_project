@@ -75,7 +75,6 @@ const getTopTimeRatioRecipes = (req, res) => {
     WITH withRating AS
     (SELECT rec.RecipeID, Recipe_name, Avg_Rate
     FROM Recipes rec JOIN Reviews rev ON rec.RecipeID = rev.RecipeID)
-
     SELECT withRating.RecipeID, Recipe_name AS RecipeName, ROUND(Avg_Rate/Total_time, 2) AS Rating_time_ratio
     FROM withRating JOIN Directions ON withRating.RecipeID = Directions.RecipeID 
     ORDER BY Rating_time_ratio DESC
@@ -157,6 +156,33 @@ const filterRecipes = (req, res) => {
   });
 };
 
+const getRecipes = (req, res) => {
+  var query = `
+  SELECT DISTINCT r.Recipe_name, r.Recipe_photo, group_concat(distinct ri.Ingredient) as Ingredients, a.Author, v.Avg_Rate AS Rate
+  FROM Recipes r
+  JOIN Recipe_author a ON r.RecipeID = a.RecipeID
+  JOIN Ingredients ri ON ri.RecipeID = r.RecipeID
+  JOIN Reviews v ON r.RecipeID = v.RecipeID
+  JOIN User_recipes ur ON ur.RecipeID = r.RecipeID
+  group by r.RecipeID;
+  `
+  connection.query(query, (err, rows, fields) => {
+    if (err) console.log(err);
+    else res.json(rows);
+  });
+};
+
+const postRecipeId = (req, res) => {
+  var givenID = req.params.recipeID;
+  var query = `
+  INSERT INTO User_recipes VALUES (123, ${givenID});
+  `
+  connection.query(query, (err, rows, fields) => {
+    if (err) console.log(err);
+    else res.json(rows);
+  });
+};
+
 module.exports = {
   getTopRecipes: getTopRecipes,
   getTopReviews: getTopReviews,
@@ -165,5 +191,8 @@ module.exports = {
   getTopOvenRecipes: getTopOvenRecipes,
 
   calories: calories,
-  filterRecipes: filterRecipes
+  filterRecipes: filterRecipes,
+
+  getRecipes: getRecipes,
+  postRecipeId: postRecipeId
 };

@@ -178,7 +178,18 @@ export default class Home extends React.Component {
     });
 
   };
-
+  
+  saveRecipes(recipeID) {
+    fetch("http://localhost:8081/save/" +recipeID,
+    {
+      method: 'POST'
+    }).then(res => {
+      console.log(recipeID);
+      return res.json();
+    }, err => {
+      console.log(err);
+    });
+  };
 
   render() {    
     return (
@@ -187,8 +198,6 @@ export default class Home extends React.Component {
         <div className="tablebk" >
         <PageNavbar active="dashboard" />
           <Row>
-          <table align="center">
-            <tr><td>
             <Col md="12">
               <Card>
                 <CardHeader>
@@ -207,13 +216,14 @@ export default class Home extends React.Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {(topRecipes).map((topRecipes) => (
-                        <tr key={topRecipes.recipeID}>
+                      {(topRecipes).map((topRecipe, index) => (
+                        <tr key={topRecipe.recipeID}>
                           <td component="th" scope="row">
-                            {topRecipes.recipeID}
+                            {topRecipe.recipeID}
                           </td>
-                          <td>{topRecipes.value}</td>
-                          <td><img src={topRecipes.value2} alt="" border="3" width="150" heigth="150"></img></td> 
+                          <td>{topRecipe.value}</td>
+                          <td><img src={topRecipe.value2} alt="" border="3" width="150" heigth="150"></img></td> 
+                          <td><button className="submit-btn" onClick={this.saveRecipes(topRecipes[index].recipeID)}>Save the recipe!</button></td>
                         </tr>
                       ))}
                     </tbody>
@@ -221,8 +231,6 @@ export default class Home extends React.Component {
                 </CardBody>
               </Card>
             </Col>
-            </td></tr>
-            </table>
           </Row>
 
         <Row>
