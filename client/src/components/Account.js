@@ -1,7 +1,7 @@
 import React from 'react';
 import PageNavbar from './PageNavbar';
 import CartRow from './CartRow';
-import '../style/BestMovies.css';
+import '../style/Account.css';
 import "bootstrap/dist/css/bootstrap.css";
 import "./assets/scss/paper-dashboard.scss?v=1.2.0";
 import "./assets/demo/demo.css";

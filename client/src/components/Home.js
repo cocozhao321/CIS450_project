@@ -1,4 +1,6 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
+import Bookmark from '@material-ui/icons/Bookmark';
 import PageNavbar from './PageNavbar';
 import DashboardMovieRow from './DashboardMovieRow';
 import '../style/BestMovies.css';
@@ -6,6 +8,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./assets/scss/paper-dashboard.scss?v=1.2.0";
 import "./assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
+
+
 
 import {
   Card,
@@ -199,12 +203,12 @@ export default class Home extends React.Component {
 
   };
   
-  saveRecipes(recipeID) {
-    fetch("http://localhost:8081/save/" +recipeID,
+  saveRecipes(recipeIDs) {
+    fetch("http://localhost:8081/save/" +recipeIDs,
     {
       method: 'POST'
     }).then(res => {
-      console.log(recipeID);
+      console.log(recipeIDs);
       return res.json();
     }, err => {
       console.log(err);
@@ -243,7 +247,7 @@ export default class Home extends React.Component {
                           </td>
                           <td>{topRecipe.value}</td>
                           <td><img src={topRecipe.value2} alt="" border="3" width="150" heigth="150"></img></td> 
-                          <td><button className="submit-btn" onClick={this.saveRecipes(topRecipes[index].recipeID)}>Save the recipe!</button></td>
+                          <td><Button variant="contained" color="default" size="small" startIcon={<Bookmark />} onClick={() => this.saveRecipes(topRecipe.recipeID)}>Save the recipe</Button></td>
                         </tr>
                       ))}
                     </tbody>
@@ -278,6 +282,7 @@ export default class Home extends React.Component {
                               </td>
                               <td>{topReviews.value}</td>
                               <td>{topReviews.value2}</td>
+                              <td><Button variant="contained" color="default" size="small" startIcon={<Bookmark />} onClick={() => this.saveRecipes(topReviews.recipeID)}>Save</Button></td>
                             </tr>
                           ))}
                         </tbody>
@@ -306,6 +311,7 @@ export default class Home extends React.Component {
                               {topAuthors.recipeID}
                             </td>
                             <td>{topAuthors.value}</td>
+                            <td><Button variant="contained" color="default" size="small" startIcon={<Bookmark />} onClick={() => this.saveRecipes(topAuthors.recipeID)}>Save</Button></td>
                           </tr>
                         ))}
                       </tbody>
@@ -342,6 +348,7 @@ export default class Home extends React.Component {
                           </td>
                           <td>{topRecipe.value}</td>
                           <td>{topRecipe.value2}</td> 
+                          <td><Button variant="contained" color="default" size="small" startIcon={<Bookmark />} onClick={() => this.saveRecipes(topRecipe.recipeID)}></Button></td>
                         </tr>
                       ))}
                     </tbody>
@@ -379,6 +386,7 @@ export default class Home extends React.Component {
                               </td>
                               <td>{topRatio.value}</td>
                               <td>{topRatio.value2}</td>
+                              <td><Button variant="contained" color="default" size="small" startIcon={<Bookmark />} onClick={() => this.saveRecipes(topRatio.recipeID)}>Save</Button></td>
                             </tr>
                           ))}
                         </tbody>
@@ -410,6 +418,7 @@ export default class Home extends React.Component {
                               {topOven.recipeID}
                             </td>
                             <td>{topOven.value}</td>
+                            <td><Button variant="contained" color="default" size="small" startIcon={<Bookmark />} onClick={() => this.saveRecipes(topOven.recipeID)}>Save</Button></td>
                           </tr>
                         ))}
                       </tbody>
