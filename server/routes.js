@@ -111,6 +111,23 @@ const getTopOvenRecipes = (req, res) => {
   });
 };
 
+const getFastestRecipes = (req, res) => {
+  var query = `
+    SELECT rec.RecipeID, Recipe_name AS RecipeName, Cook_time
+    FROM Recipes rec JOIN Directions d ON rec.RecipeID = d.RecipeID
+    ORDER BY Cook_time 
+    LIMIT 5;
+  `;
+
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      console.log(rows)
+      res.json(rows);
+    }
+  });
+};
+
 /* ---- Calories---- */
 const calories = (req, res) => {
   var ingredient = req.params.term;
@@ -189,6 +206,7 @@ module.exports = {
   getTopAuthors: getTopAuthors,
   getTopTimeRatioRecipes: getTopTimeRatioRecipes,
   getTopOvenRecipes: getTopOvenRecipes,
+  getFastestRecipes: getFastestRecipes,
 
   calories: calories,
   filterRecipes: filterRecipes,

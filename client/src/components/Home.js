@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 
 
-const topRecipes = [], topReviews = [], topAuthors = [], topRatio =[], topOven = [];
+const topRecipes = [], topReviews = [], topAuthors = [], topRatio =[], topOven = [], fastestRecipes = [];
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -177,6 +177,26 @@ export default class Home extends React.Component {
       console.log(err);
     });
 
+    fetch("http://localhost:8081/fastestRecipes",
+    {
+      method: 'GET' // The type of HTTP request.
+    }).then(res => {
+      // Convert the response data to a JSON.
+      return res.json();
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    }).then(recipeList => {
+      if (!recipeList) return;
+      
+      recipeList.forEach((item, i) => {
+        fastestRecipes.push(createDataThreeElem(item.RecipeID, item.RecipeName, item.Cook_time));
+      });
+    }, err => {
+      // Print the error if there is one.
+      console.log(err);
+    });
+
   };
   
   saveRecipes(recipeID) {
@@ -296,6 +316,40 @@ export default class Home extends React.Component {
             </td></tr>
           </table> 
         </Row>
+
+        <Col md="12">
+              <Card>
+                <CardHeader>
+                  <CardTitle tag="h4">Top 5 Quickest Recipes</CardTitle>
+                  <p className="card-category">
+                    Recipes that take the least cook-time
+                  </p>
+                </CardHeader>
+                <CardBody>
+                  <Table responsive>
+                    <thead className="text-primary">
+                      <tr>
+                        <th className="text-left">ID</th>
+                        <th>Name</th>
+                        <th>Cook_Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(fastestRecipes).map((topRecipe, index) => (
+                        <tr key={topRecipe.recipeID}>
+                          <td component="th" scope="row">
+                            {topRecipe.recipeID}
+                          </td>
+                          <td>{topRecipe.value}</td>
+                          <td>{topRecipe.value2}</td> 
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </CardBody>
+              </Card>
+            </Col>
+
 
         <Row>
           <table align="center">

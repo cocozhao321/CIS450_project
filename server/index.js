@@ -37,6 +37,9 @@ app.get('/topTimeRatioRecipes', routes.getTopTimeRatioRecipes);
 // Top 10 Best Rating-to-Time Recipes that Use an Oven
 app.get('/topOvenRecipes', routes.getTopOvenRecipes);
 
+// Top 5 Fastest Cook-time Recipes
+app.get('/fastestRecipes', routes.getFastestRecipes);
+
 app.get('/calories/:term/', routes.calories);
 
 app.get('/search/:ingredient/:author/:cooktime/', routes.filterRecipes);
