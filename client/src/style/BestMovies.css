@@ -17,7 +17,8 @@
 }
 
 .h5 { 
-  color: black; font-family: 'Trocchi', serif; font-size: 38px; font-weight: bold; text-align: center; 
+  color: rgb(44, 32, 7); 
+  font-family: 'Helvetica Neue', sans-serif; font-size: 275px; font-weight: bold; letter-spacing: -1px; line-height: 1; text-align: center;  
 }
 
 .filtering { 
@@ -34,7 +35,7 @@
 
 .background {
   background-image: url("../style/foodbk.jpeg");
-  min-height: 2000px;
+  min-height: 2500px;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -43,16 +44,20 @@
 
 .gridcontainer {
   display: grid;
-  grid-template-columns: 250px 250px 250px;
+  grid-template-columns: 300px 300px 300px;
   grid-gap: 30px;
   align-items: center;
-  height: 40px;
+  height: 300px;
   padding: 0 10px;
   justify-content: space-around;
 }
 
 .name .rating .author .cooktime {
   color:black; font-size: 30px; font-family: "Libre Baskerville", serif; line-height: 45px; text-shadow: 0 1px 1px #fff;
+}
+
+.recipeID {
+  color:black; font-size: 20px; font-weight: bold; 
 }
 
 

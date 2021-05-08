@@ -52,12 +52,14 @@ export default class Search extends React.Component {
     }).then(recipesList => {
       if (!recipesList) return;
       const recipeDivs = recipesList.map((recipeObj, i) =>
-        <SearchRow 
+        <SearchRow
+          recipeID = {recipeObj.RecipeID} 
           name={recipeObj.Recipe_name} 
           img={recipeObj.Recipe_photo} 
           rating={recipeObj.Rate} 
           author={recipeObj.Author}
           totalcooktime={recipeObj.Total_time}
+          
         /> 
       );
 
@@ -77,7 +79,7 @@ export default class Search extends React.Component {
         
 				<div className="search">
           <br></br>
-						<div className="h5">Customized Filter</div>
+						<h1 className="h5">Customized Filter</h1>
             <br></br>
             <p class="filtering">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Results will rank in rating order from high to low ｡◕ ‿ ◕｡</p>
             <div className="filters">
@@ -87,9 +89,8 @@ export default class Search extends React.Component {
               <button id="submitMovieBtn" className="submit-btn" onClick={this.submitFilters}>Find your recipe!</button>
 						</div>
             <br></br>
-            <div className="gridcontainer">
-              {this.state.recipes}
-						</div>
+            <br></br>
+            {this.state.recipes.length > 1 ? <div class="gridcontainer">{this.state.recipes}</div> : "Sorry, no matching results o(╥﹏╥)o"}
         </div>
 			</div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	BrowserRouter as Router,
 	Route,
@@ -8,16 +8,15 @@ import Home from './Home';
 import Calories from './Calories';
 import Account from './Account';
 import Search from './Search';
-import Login from './Login/Login';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./assets/scss/paper-dashboard.scss?v=1.2.0";
 import "./assets/demo/demo.css";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-function App() {
+export default class App extends React.Component {
 
-	//render() {
+	render() {
 		return (
 			<div className="App">
 				<Router>
@@ -48,6 +47,5 @@ function App() {
 				</Router>
 			</div>
 		);
-	//};
+	};
 };
-export default App;
