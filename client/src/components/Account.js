@@ -1,128 +1,85 @@
 import React from 'react';
-import '../style/Dashboard.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNavbar from './PageNavbar';
-import KeywordButton from './KeywordButton';
-import DashboardMovieRow from './DashboardMovieRow';
+import CartRow from './CartRow';
 import '../style/BestMovies.css';
+import "bootstrap/dist/css/bootstrap.css";
+import "./assets/scss/paper-dashboard.scss?v=1.2.0";
+import "./assets/demo/demo.css";
+import "perfect-scrollbar/css/perfect-scrollbar.css";
 
-export default class Account extends React.Component {
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Table,
+  Row,
+  Col,
+} from "reactstrap";
+
+
+const selectedRecipes = [];
+
+export default class Home extends React.Component {
   constructor(props) {
     super(props);
-
-    // The state maintained by this React Component. This component maintains the list of keywords,
-    // and a list of movies for a specified keyword.
     this.state = {
-      keywords: [],
-      movies: []
+      recipes: []
     };
-
-    this.showMovies = this.showMovies.bind(this);
   };
+
 
   // React function that is called when the page load.
-  componentDidMount() {
+  componentDidMount() {    
     // Send an HTTP request to the server.
-    fetch("http://localhost:8081/keywords",
+    fetch("http://localhost:8081/Account",
     {
       method: 'GET' // The type of HTTP request.
     }).then(res => {
       // Convert the response data to a JSON.
       return res.json();
     }, err => {
-      // Print the error if there is one.
       console.log(err);
-    }).then(keywordsList => {
-      if (!keywordsList) return;
-
-      // Map each keyword in this.state.keywords to an HTML element:
-      // A button which triggers the showMovies function for each keyword.
-      const keywordsDivs = keywordsList.map((keywordObj, i) =>
-        <KeywordButton 
-          id={"button-" + keywordObj.kwd_name} 
-          onClick={() => this.showMovies(keywordObj.kwd_name)} 
-          keyword={keywordObj.kwd_name} 
+    }).then(recipesList => {
+      if (!recipesList) return;
+      const recipeDivs = recipesList.map((recipeObj, i) =>
+        <CartRow 
+          name={recipeObj.Recipe_name} 
+          img={recipeObj.Recipe_photo} 
+          rating={recipeObj.Rate} 
+          author={recipeObj.Author}
+          totalcooktime={recipeObj.Ingredients}
         /> 
       );
 
-      // Set the state of the keywords list to the value returned by the HTTP response from the server.
       this.setState({
-        keywords: keywordsDivs
+        recipes: recipeDivs
       });
+
     }, err => {
       // Print the error if there is one.
       console.log(err);
     });
-  };
-
-  /* ---- Q1b (Dashboard) ---- */
-  /* Set this.state.movies to a list of <DashboardMovieRow />'s. */
-  showMovies(keyword) {
-    fetch("http://localhost:8081/keywords/"+keyword,
-    {
-      method: 'GET' // The type of HTTP request.
-    }).then(res => {
-      // Convert the response data to a JSON.
-      return res.json();
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    }).then(moviesList => {
-      if (!moviesList) return;
-
-      // Map each movie in this.state.keywords to an HTML element:
-      // A button which triggers the showMovies function for each keyword.
-      // console.log(moviesList[0].num_ratings + "W" + moviesList[0].title);
-      const movieDivs = moviesList.map((movieObj, i) =>
-        <DashboardMovieRow 
-          title={movieObj.title} 
-          rating={movieObj.rating} 
-          num_ratings={movieObj.num_ratings} 
-        /> 
-      );
-
-      // Set the state of the keywords list to the value returned by the HTTP response from the server.
-      this.setState({
-        movies: movieDivs
-      });
-    }, err => {
-      // Print the error if there is one.
-      console.log(err);
-    });
-    // this.state.movies = ?
   };
 
   render() {    
     return (
-      <div className="Dashboard">
-      <div className="lemonbk" >
-        <PageNavbar active="dashboard" />
+      <div className="background" >
+      <div className="Search">  
+      <PageNavbar active="account" />
+      <div className="search">
+          <br></br>
+            <div className="h1"><center>Your favourite Recipes</center></div>
+            <br></br>
+            <div className="gridcontainer">
 
-        <br />
-        <div className="container movies-container">
-          <div className="jumbotron">
-            <div className="h5">Keywords</div>
-            <div className="keywords-container">
-              {this.state.keywords}
+              {this.state.recipes}
+              <br></br>
             </div>
-          </div>
-
-          <br />
-          <div className="jumbotron">
-            <div className="movies-container">
-              <div className="movies-header">
-                <div className="header-lg"><strong>Title</strong></div>
-                <div className="header"><strong>Rating</strong></div>
-                <div className="header"><strong>Vote Count</strong></div>
-              </div>
-              <div className="results-container" id="results">
-                {this.state.movies}
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       </div>
+      </div>
+
     );
   };
 };

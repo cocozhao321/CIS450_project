@@ -26,7 +26,7 @@ export default class PageNavbar extends React.Component{
                     </NavbarToggler>
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav navbar>
-                            <NavItem active>
+                            <NavItem>
                                 <NavLink href="/home">
                                     Home <span className="sr-only">(current)</span>
                                 </NavLink>
@@ -43,7 +43,7 @@ export default class PageNavbar extends React.Component{
                             </NavItem>
 							<NavItem>
                                 <NavLink href="/account">
-                                    Account
+                                    Saved Recipes
                                 </NavLink>
                             </NavItem>
                         </Nav>
