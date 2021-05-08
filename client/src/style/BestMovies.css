@@ -35,7 +35,7 @@
 
 .background {
   background-image: url("../style/foodbk.jpeg");
-  min-height: 2000px;
+  min-height: 2500px;
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -54,6 +54,10 @@
 
 .name .rating .author .cooktime {
   color:black; font-size: 30px; font-family: "Libre Baskerville", serif; line-height: 45px; text-shadow: 0 1px 1px #fff;
+}
+
+.recipeID {
+  color:black; font-size: 20px; font-weight: bold; 
 }
 
 
