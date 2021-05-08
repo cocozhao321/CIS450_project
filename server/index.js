@@ -5,7 +5,15 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors());
+/*
+app.use('/login', (req, res) => {
+  res.send({
+    token: 'test123'
+  });
+});
+*/
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -33,6 +41,8 @@ app.get('/calories/:term/', routes.calories);
 
 app.get('/search/:ingredient/:author/:cooktime/', routes.filterRecipes);
 
+app.get('/Account', routes.getRecipes);
+app.post('/save/:recipeID/', routes.postRecipeId);
 
 app.listen(8081, () => {
 	console.log(`Server listening on PORT 8081`);
