@@ -196,6 +196,18 @@ export default class Home extends React.Component {
       recipeList.forEach((item, i) => {
         fastestRecipes.push(createDataThreeElem(item.RecipeID, item.RecipeName, item.Cook_time));
       });
+
+      const a = recipeList.map((recObj, i) =>
+      <DashboardMovieRow 
+        RecipeID={recObj.RecipeID}
+        RecipeName={recObj.RecipeName} 
+      />
+    );
+
+    // Set the state of the keywords list to the value returned by the HTTP response from the server.
+    this.setState({
+      topOvenResults: a
+    });
     }, err => {
       // Print the error if there is one.
       console.log(err);
@@ -348,7 +360,7 @@ export default class Home extends React.Component {
                           </td>
                           <td>{topRecipe.value}</td>
                           <td>{topRecipe.value2}</td> 
-                          <td><Button variant="contained" color="default" size="small" startIcon={<Bookmark />} onClick={() => this.saveRecipes(topRecipe.recipeID)}></Button></td>
+                          <td><Button variant="contained" color="default" size="small" startIcon={<Bookmark />} onClick={() => this.saveRecipes(topRecipe.recipeID)}>Save</Button></td>
                         </tr>
                       ))}
                     </tbody>

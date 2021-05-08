@@ -191,9 +191,7 @@ const getRecipes = (req, res) => {
 
 const postRecipeId = (req, res) => {
   var givenID = req.params.recipeID;
-  var query = `
-  INSERT INTO User_recipes VALUES (123, ${givenID});
-  `
+  var query = `INSERT INTO User_recipes VALUES (123, ${givenID});`
   connection.query(query, (err, rows, fields) => {
     if (err) console.log(err);
     else res.json(rows);
