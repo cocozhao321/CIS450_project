@@ -79,7 +79,7 @@ export default class Search extends React.Component {
         
 				<div className="search">
           <br></br>
-						<h1 className="h5">Customized Filter</h1>
+						<h3>Customized Filter</h3>
             <br></br>
             <p class="filtering">(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ Results will rank in rating order from high to low ｡◕ ‿ ◕｡</p>
             <div className="filters">
@@ -90,7 +90,7 @@ export default class Search extends React.Component {
 						</div>
             <br></br>
             <br></br>
-            {this.state.recipes.length > 1 ? <div class="gridcontainer">{this.state.recipes}</div> : "Sorry, no matching results o(╥﹏╥)o"}
+            {this.state.recipes.length > 0 ? <div class="gridcontainer">{this.state.recipes}</div> : "Sorry, no matching results o(╥﹏╥)o"}
         </div>
 			</div>
       </div>
